@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="be.thomasmore.swrott.EditTeamActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/rottTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            app:popupTheme="@style/rottTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/teamname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize"
+                android:text="TEAMNAME"
+                android:layout_margin="10dp"/>
+
+            <!--Horizontal rule-->
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/colorHRule"
+                android:layout_marginBottom="@dimen/bigger_margin" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/homeplanet_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/edit_team_homeplanet_text"
+                android:textSize="@dimen/textSize"
+                android:layout_margin="10dp"/>
+
+            <TextView
+                android:id="@+id/homeplanet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="@dimen/textSize"
+                android:layout_margin="10dp" />
+        </LinearLayout>
+
+        <!-- Add it when there's time -->
+        <ProgressBar
+            android:id="@+id/experience"
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_margin="10dp"
+            android:visibility="gone"/>
+
+
+        <Button
+            android:id="@+id/add_member"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_team_add_member"
+            android:layout_margin="10dp" />
+
+        <LinearLayout
+            android:id="@+id/header"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/list_member_header"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:id="@+id/textView" />
+
+            <!--Horizontal rule-->
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/colorHRule"
+                android:layout_marginBottom="@dimen/bigger_margin" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/listViewMembers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/normal_margin">
+        </ListView>
+
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="@dimen/textSize"
+            android:text="@string/list_member_empty"
+            android:visibility="gone"
+            android:layout_margin="10dp"/>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
