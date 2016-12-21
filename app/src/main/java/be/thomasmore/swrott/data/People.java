@@ -127,4 +127,9 @@ public class People implements Serializable {
     public void setHomeworld(Planet homeworld) {
         this.homeworld = homeworld;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

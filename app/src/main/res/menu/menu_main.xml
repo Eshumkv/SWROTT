@@ -7,7 +7,7 @@
         android:id="@+id/action_fight"
         android:orderInCategory="100"
         android:icon="@drawable/fight_icon"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:title="@string/action_fight" />
     <item
         android:id="@+id/action_refresh"

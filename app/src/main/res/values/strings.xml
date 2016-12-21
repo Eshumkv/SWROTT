@@ -8,12 +8,17 @@
     <string name="dialog_no_internet">Do you want to load old data? If not, the app will quit. Try again when you have an active internet connection.</string>
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
-    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_ok">OK</string>
     <string name="dialog_teamname">Team name</string>
     <string name="dialog_homeplanet">Homeplanet</string>
     <string name="dialog_maketeam_title">Make a new team</string>
     <string name="dialog_deleteteam_title">DELETE TEAM</string>
     <string name="dialog_confirm_team_deletion">Are you sure you wish to delete this team? This action can NOT be undone!</string>
+    <string name="dialog_error_title">Error</string>
+    <string name="dialog_error_should_not_happen">Something really went wrong.</string>
+    <string name="dialog_error_char_already_in_team">This character is already in this team.</string>
+    <string name="dialog_deletemember_title">DELETE MEMBER</string>
+    <string name="dialog_confirm_member_deletion">Are you sure you wish to delete this team? This action can NOT be undone!</string>
 
 
     <string name="list_team_header">Your teams</string>
@@ -23,14 +28,23 @@
     <string name="list_member_empty">No teammembers</string>
 
 
-    <string name="title_activity_edit_team">EditTeamActivity</string>
-
     <string name="splash_starwars">STAR WARS</string>
     <string name="splash_title">Return Of The Team</string>
 
     <string name="main_make_team">Make team</string>
 
-    <string name="edit_team_experience">Experience:</string>
     <string name="edit_team_homeplanet_text">Homeplanet</string>
     <string name="edit_team_add_member">Add member</string>
+
+    <string name="add_member_header">Add Member</string>
+
+    <string name="stat_header">Statistics</string>
+    <string name="stat_speed">Speed</string>
+    <string name="stat_attack">Attack</string>
+    <string name="stat_defense">Defense</string>
+    <string name="stat_hp">Healthpoints</string>
+    <string name="stat_level">Level</string>
+    <string name="stat_experience">Experience</string>
+    <string name="stat_exp_to_level">Exp. to level</string>
+
 </resources>

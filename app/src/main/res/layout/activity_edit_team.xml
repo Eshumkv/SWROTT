@@ -50,29 +50,32 @@
                 android:layout_marginBottom="@dimen/bigger_margin" />
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/homeplanet_text"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/edit_team_homeplanet_text"
                 android:textSize="@dimen/textSize"
-                android:layout_margin="10dp"/>
+                android:layout_margin="10dp"
+                android:layout_alignParentLeft="true"/>
 
             <TextView
                 android:id="@+id/homeplanet"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:text="ALDERAAN"
                 android:textSize="@dimen/textSize"
-                android:layout_margin="10dp" />
-        </LinearLayout>
+                android:layout_margin="10dp"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
 
         <!-- Add it when there's time -->
         <ProgressBar

@@ -37,8 +37,6 @@ import be.thomasmore.swrott.data.Team;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int MAXTEAMS = 5;
-
     List<Team> teams = new ArrayList<Team>();
     TeamAdapter teamAdapter;
     List<Planet> planets = new ArrayList<>();
@@ -69,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, EditTeamActivity.class);
                 intent.putExtra(Helper.TEAMID_MESSAGE, team.getId());
                 startActivity(intent);
+
             }
         });
 
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkButton() {
         final Button button = (Button) findViewById(R.id.make_team);
-        if (teams.size() >= MAXTEAMS) {
+        if (teams.size() >= Helper.MAXTEAMS) {
             button.setVisibility(View.GONE);
         }
     }
@@ -181,19 +180,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
-            Intent intent = new Intent(this, EditTeamActivity.class);
-            //intent.putExtra("name", obj);
-            startActivity(intent);
-            return true;
-        }*/
-
-        return super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.action_fight:
+                Intent intent = new Intent(this, StartFight.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

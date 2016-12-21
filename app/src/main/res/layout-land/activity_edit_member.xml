@@ -64,47 +64,53 @@
                 android:layout_marginBottom="@dimen/bigger_margin" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linearlayout1"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/header">
-
-            <ImageView
-                android:id="@+id/picture"
-                android:layout_width="wrap_content"
-                android:layout_height="150dp"
-                android:layout_gravity="center_horizontal" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/stat_experience"
-                android:textSize="@dimen/textSize"
-                android:layout_marginLeft="@dimen/normal_margin"
-                android:layout_marginStart="@dimen/normal_margin"
-                android:layout_marginBottom="2dp"
-                android:layout_marginTop="@dimen/normal_margin" />
-
-            <ProgressBar
-                android:id="@+id/experience"
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_marginLeft="@dimen/normal_margin"
-                android:layout_marginStart="@dimen/normal_margin"
-                android:layout_marginRight="@dimen/normal_margin"
-                android:layout_marginEnd="@dimen/normal_margin"
-                android:layout_marginBottom="2dp"
-                android:layout_marginTop="@dimen/normal_margin" />
-        </LinearLayout>
-
-        <include
-            layout="@layout/part_stats"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/linearlayout1" />
+            android:layout_below="@+id/header">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stat_experience"
+                    android:textSize="@dimen/textSize"
+                    android:layout_marginLeft="@dimen/normal_margin"
+                    android:layout_marginStart="@dimen/normal_margin"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="@dimen/normal_margin" />
+
+                <ProgressBar
+                    android:id="@+id/experience"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_marginLeft="@dimen/normal_margin"
+                    android:layout_marginStart="@dimen/normal_margin"
+                    android:layout_marginRight="@dimen/normal_margin"
+                    android:layout_marginEnd="@dimen/normal_margin"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="@dimen/normal_margin" />
+
+                <include
+                    layout="@layout/part_stats"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/linearlayout1" />
+
+                <ImageView
+                    android:id="@+id/picture"
+                    android:layout_width="wrap_content"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/normal_margin"
+                    android:layout_marginBottom="@dimen/normal_margin" />
+            </LinearLayout>
+        </ScrollView>
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

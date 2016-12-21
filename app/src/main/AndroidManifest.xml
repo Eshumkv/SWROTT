@@ -34,10 +34,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddMember" />
+        <activity android:name=".AddMember"
+            android:parentActivityName=".EditTeamActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="be.thomasmore.swrott.EditTeamActivity" />
+        </activity>
         <activity android:name=".EditMember" />
         <activity android:name=".ChoosePicture" />
-        <activity android:name=".StartFight" />
+        <activity
+            android:name=".StartFight"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="be.thomasmore.swrott.MainActivity" />
+        </activity>
         <activity android:name=".Fight" />
         <activity android:name=".FightResult" />
         <activity android:name=".FightDetails"></activity>

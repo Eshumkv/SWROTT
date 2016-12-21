@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -22,12 +23,14 @@ import java.util.List;
 
 import be.thomasmore.swrott.data.DatabaseHelper;
 import be.thomasmore.swrott.data.Member;
+import be.thomasmore.swrott.data.Planet;
 import be.thomasmore.swrott.data.Team;
 
 public class EditTeamActivity extends AppCompatActivity {
 
-    private Team team;
-    private DatabaseHelper db;
+    private Team _team;
+    private List<Member> _members;
+    private DatabaseHelper _db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,36 +40,35 @@ public class EditTeamActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        db = new DatabaseHelper(this);
-
         long teamId = getIntent().getLongExtra(Helper.TEAMID_MESSAGE, -1);
 
         if (teamId == -1) {
             Log.e("ERROR", "Seriously don't know what to do");
+            Helper.showErrorDialog(this, MainActivity.class);
             return;
         }
 
-        team = db.getTeam(teamId);
+        _db = new DatabaseHelper(this);
+        setup(teamId);
+    }
 
-        TextView teamName = (TextView) findViewById(R.id.teamname);
-        ListView members = (ListView) findViewById(R.id.listViewMembers);
-        Button addMember = (Button) findViewById(R.id.add_member);
-
-        teamName.setText(team.getName());
-        members.setAdapter(new ArrayAdapter<Member>(
-                this,
-                android.R.layout.simple_list_item_1,
-                db.getMembers(team.getId())
-        ));
-        members.setEmptyView(findViewById(R.id.empty));
-        addMember.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EditTeamActivity.this, AddMember.class);
-                intent.putExtra(Helper.TEAMID_MESSAGE, team.getId());
-                startActivity(intent);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                // empty for now
             }
-        });
+
+            long teamId = data.getLongExtra(Helper.TEAMID_MESSAGE, -1);
+
+            if (teamId == -1) {
+                Log.e("ERROR", "Seriously don't know what to do");
+                Helper.showErrorDialog(this, MainActivity.class);
+                return;
+            }
+            setup(teamId);
+        }
     }
 
     @Override
@@ -83,8 +85,53 @@ public class EditTeamActivity extends AppCompatActivity {
             case R.id.action_delete:
                 showDialog();
                 return true;
+            case R.id.action_fight:
+                Intent intent = new Intent(this, StartFight.class);
+                intent.putExtra(Helper.TEAMID_MESSAGE, _team.getId());
+                startActivity(intent);
+                finish();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setup(long teamId) {
+        _team = _db.getTeam(teamId);
+        _members = _db.getMembers(_team.getId());
+
+        final TextView teamName = (TextView) findViewById(R.id.teamname);
+        final TextView homeworld = (TextView) findViewById(R.id.homeplanet);
+        final ListView members = (ListView) findViewById(R.id.listViewMembers);
+        final Button addMember = (Button) findViewById(R.id.add_member);
+        final Planet planet = _db.getPlanet(_team.getPlanetId());
+
+        homeworld.setText(planet.getName());
+        teamName.setText(_team.getName());
+        members.setAdapter(new ArrayAdapter<Member>(
+                this,
+                android.R.layout.simple_list_item_1,
+                _members
+        ));
+        members.setEmptyView(findViewById(R.id.empty));
+        members.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView parentView, View childView, int position, long id) {
+                Intent intent = new Intent(EditTeamActivity.this, EditMember.class);
+                intent.putExtra(Helper.MEMBERID_MESSAGE, _members.get(position).getId());
+                startActivityForResult(intent, 1);
+            }
+        });
+        addMember.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditTeamActivity.this, AddMember.class);
+                intent.putExtra(Helper.TEAMID_MESSAGE, _team.getId());
+                startActivityForResult(intent, 1);
+            }
+        });
+        if (_members.size() >= Helper.MAXMEMBERS) {
+            addMember.setVisibility(View.GONE);
         }
     }
 
@@ -100,7 +147,7 @@ public class EditTeamActivity extends AppCompatActivity {
             .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    db.deleteTeam(team.getId());
+                    _db.deleteTeam(_team.getId());
 
                     Intent intent = new Intent(EditTeamActivity.this, MainActivity.class);
                     startActivity(intent);

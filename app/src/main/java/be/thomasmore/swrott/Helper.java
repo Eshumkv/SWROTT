@@ -1,9 +1,16 @@
 package be.thomasmore.swrott;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,6 +29,7 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
@@ -29,12 +37,39 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import be.thomasmore.swrott.data.Stats;
+
 /**
  * Created by koenv on 8-12-2016.
  */
 public class Helper {
 
+    public static final int MAXTEAMS = 5;
+    public static final int MAXMEMBERS = 5;
+
     public final static String TEAMID_MESSAGE = "be.thomasmore.swrott.TEAMID_MESSAGE";
+    public final static String MEMBERID_MESSAGE = "be.thomasmore.swrott.MEMBERID_MESSAGE";
+
+    public final static Random _rand = new Random();
+
+    public final static List<String> PICTURES = Arrays.asList(new String[]{
+            "profile_default.jpg",
+            "profile_1.jpg",
+            "profile_2.jpg",
+            "profile_3.jpg",
+            "profile_4.jpg",
+            "profile_5.jpg",
+            "profile_6.jpg",
+            "profile_7.jpg",
+            "profile_8.jpg",
+            "profile_9.jpg",
+            "profile_10.jpg",
+            "profile_11.jpg",
+            "profile_12.jpg",
+            "profile_13.jpg",
+            "profile_14.jpg",
+            "profile_15.jpg"
+    });
 
     public static String getXmlString(Context c, int id) {
         return c.getResources().getString(id);
@@ -72,6 +107,71 @@ public class Helper {
         }
 
         return sb.toString();
+    }
+
+    public static int randomBetween(int min, int max) {
+        return _rand.nextInt((max - min) + 1) + min;
+    }
+
+    public static <T> void showErrorDialog(final Context c, final Class<T> cls) {
+        new AlertDialog.Builder(c)
+            .setTitle(R.string.dialog_error_title)
+            .setMessage(R.string.dialog_error_should_not_happen)
+            .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(c, cls);
+                    c.startActivity(intent);
+                }
+            })
+            .create()
+            .show();
+    }
+
+    public static Bitmap getPicture(Context c, String path, int w, int h) {
+        FileInputStream fis = null;
+
+        try {
+            File file = new File(
+                    c.getFilesDir(),
+                    path
+            );
+            fis = new FileInputStream(file);
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+
+            BitmapFactory.decodeStream(fis, null, options);
+            options.inSampleSize = calculateInSampleSize(options, w, h);
+            options.inJustDecodeBounds = false;
+
+            fis = new FileInputStream(file);
+            return BitmapFactory.decodeStream(fis, null, options);
+
+        } catch (Exception e) {
+            Log.e("EDIT", "Couldn't load image!", e);
+        } finally {
+            if (fis != null) {
+                try { fis.close(); } catch (Exception e) {}
+            }
+        }
+
+        return null;
+    }
+
+    public static void updateStatsPart(Stats stats, AppCompatActivity app) {
+        TextView txtAttack = (TextView) app.findViewById(R.id.attack);
+        TextView txtDefense = (TextView) app.findViewById(R.id.defense);
+        TextView txtSpeed = (TextView) app.findViewById(R.id.speed);
+        TextView txtLevel = (TextView) app.findViewById(R.id.level);
+        TextView txtExpToLevel = (TextView) app.findViewById(R.id.exp_to_level);
+        TextView txtHp = (TextView) app.findViewById(R.id.hp);
+
+        txtAttack.setText(String.valueOf(stats.getAttack()));
+        txtDefense.setText(String.valueOf(stats.getDefense()));
+        txtSpeed.setText(String.valueOf(stats.getSpeed()));
+        txtLevel.setText(String.valueOf(stats.getLevel()));
+        txtExpToLevel.setText(String.valueOf(stats.getExpToLevel()));
+        txtHp.setText(String.valueOf(stats.getHealthPoints()));
     }
 
     public static String getRandomTeamName() {
@@ -161,7 +261,7 @@ public class Helper {
 
             result = (T) is.readObject();
         } catch (Exception e) {
-            Log.e("HELPER deserializeObj", "Could not deserialize object: " + e.getStackTrace());
+            Log.e("HELPER deserializeObj", "Could not deserialize object", e);
         } finally {
             if (is != null)
                 try { is.close(); } catch (Exception e) {}
@@ -263,5 +363,23 @@ public class Helper {
         }
 
         return sb.toString();
+    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 }

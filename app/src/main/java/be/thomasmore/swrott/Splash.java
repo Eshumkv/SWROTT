@@ -2,6 +2,10 @@ package be.thomasmore.swrott;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +15,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ProgressBar;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +34,7 @@ import be.thomasmore.swrott.data.Species;
 
 public class Splash extends AppCompatActivity {
 
-    private final int SPLASH_WAIT_TIME = 3000;
+    private final int SPLASH_WAIT_TIME = 1500;
     private DatabaseHelper db;
 
     @Override
@@ -42,7 +52,13 @@ public class Splash extends AppCompatActivity {
             // See if we have a few items in the db
             // If we have, we probably updated
             if (db.getPlanetsCount() > 20) {
-                goToMain();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        handlePictures();
+                        goToMain();
+                    }
+                }, SPLASH_WAIT_TIME);
                 return;
             }
 
@@ -73,9 +89,15 @@ public class Splash extends AppCompatActivity {
 
                         db.insertPlanets(planets);
                         db.insertSpecies(species);
-                        db.insertPeople(people);
+                        db.insertPeoples(people);
 
-                        goToMain();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                handlePictures();
+                                goToMain();
+                            }
+                        }, SPLASH_WAIT_TIME);
                     }
                 });
             builder.create().show();
@@ -90,7 +112,7 @@ public class Splash extends AppCompatActivity {
 
         // Create a list to hold results
         // Hacky way of getting data from a thread
-        final int listSize = 3 * 2;     // 3 threads (which might call another thread)
+        final int listSize = 3 * 2 + 1;     // 3 threads (which might call another thread)
         final List<Boolean> results = new ArrayList<>(listSize);
 
         // Make the thread to check whether we've loaded
@@ -149,7 +171,7 @@ public class Splash extends AppCompatActivity {
                         public void resultReady(List result) {
                             List<People> people = (List<People>)result;
                             db.deleteAllPeople();
-                            db.insertPeople(people);
+                            db.insertPeoples(people);
                             results.add(true);
                         }
                     }).execute(peopleUrl);
@@ -193,14 +215,56 @@ public class Splash extends AppCompatActivity {
 
         // Handler to start the MainActivity
         // Close this splash after specified time
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                Intent mainIntent = new Intent(Splash.this, MainActivity.class);
-//                Splash.this.startActivity(mainIntent);
-//                Splash.this.finish();
-//            }
-//        }, SPLASH_WAIT_TIME);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                handlePictures();
+                results.add(true);
+            }
+        }, SPLASH_WAIT_TIME);
+    }
+
+    private void handlePictures() {
+        // Handle pictures
+        // If the standard picture does not exist, just add it
+        for (String path: Helper.PICTURES) {
+            String[] parts = path.split("\\.");
+            int resourceId = getResources().getIdentifier(
+                    parts[0],
+                    "drawable",
+                    getPackageName()
+            );
+            //Drawable drawable = getResources().getDrawable(R.drawable.profile_default);
+            Drawable drawable = getResources().getDrawable(resourceId);
+            File file = new File(
+                    getApplicationContext().getFilesDir(),
+                    path
+            );
+
+            if (file.exists() || drawable == null) {
+                continue;
+            }
+
+            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            final byte[] bitmapdata = stream.toByteArray();
+
+            OutputStream out = null;
+            try {
+                out = new FileOutputStream(file);
+                out.write(bitmapdata);
+            } catch (Exception e) {
+                Log.e("Splash", "Could not copy default profile image: " + e);
+            } finally {
+                if (out != null) {
+                    try {
+                        out.close();
+                    } catch (Exception e) {
+                    }
+                }
+            }
+        }
     }
 
     private void goToMain() {

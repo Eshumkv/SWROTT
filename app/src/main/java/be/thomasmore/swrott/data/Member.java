@@ -15,6 +15,8 @@ public class Member {
     private int level;
     private int healthPoints;
 
+    private Stats stats;
+
     private long teamId;
     private long peopleId;
     private long pictureId;
@@ -117,6 +119,7 @@ public class Member {
 
     public void setTeam(Team team) {
         this.team = team;
+        this.teamId = team.getId();
     }
 
     public People getPerson() {
@@ -125,6 +128,7 @@ public class Member {
 
     public void setPerson(People person) {
         this.person = person;
+        this.peopleId = person.getId();
     }
 
     public Picture getPicture() {
@@ -133,6 +137,35 @@ public class Member {
 
     public void setPicture(Picture picture) {
         this.picture = picture;
+        this.pictureId = picture.getId();
+    }
+
+    public void setStats(Stats stats) {
+        speed = stats.getSpeed();
+        attack = stats.getAttack();
+        defense = stats.getDefense();
+        experience = stats.getExperience();
+        expToLevel = stats.getExpToLevel();
+        healthPoints = stats.getHealthPoints();
+        level = stats.getLevel();
+
+        this.stats = stats;
+    }
+
+    public Stats getStats() {
+        if (stats == null) {
+            stats = new Stats();
+
+            stats.setSpeed(speed);
+            stats.setAttack(attack);
+            stats.setDefense(defense);
+            stats.setExperience(experience);
+            stats.setExpToLevel(expToLevel);
+            stats.setHealthPoints(healthPoints);
+            stats.setLevel(level);
+        }
+
+        return stats;
     }
 
     @Override

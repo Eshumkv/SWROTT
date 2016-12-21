@@ -16,7 +16,7 @@ import java.util.List;
  * Created by koenv on 11-12-2016.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 16;
     private static final String DATABASE_NAME = "swrott";
 
     private static final String PLANET = "Planet";
@@ -159,6 +159,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private void insertTestData(SQLiteDatabase db) {
         db.execSQL("INSERT INTO Team (name, planetId) VALUES ('The Sith Destroyers', 2)");
+
+        db.execSQL("INSERT INTO Picture (path) VALUES ('profile_default.jpg');");
     }
 
     /*************************************************************************
@@ -623,7 +625,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // -- Delete
     public boolean deleteTeam(long id) {
-        return genericDelete(TEAM, id);
+        List<Member> members = getMembers(id);
+        boolean result = true;
+
+        for (Member m : members) {
+            result &= deleteMember(m.getId());
+        }
+
+        return result && genericDelete(TEAM, id);
     }
     public boolean deleteAllTeams() {
         return genericDeleteAll(TEAM);
@@ -667,6 +676,73 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return obj;
+    }
+
+    public Picture getPicture(String path) {
+        if (!doesPicturePathExist(path)) {
+            Picture picture = new Picture();
+            picture.setPath(path);
+
+            long id = insertPicture(picture);
+
+            return getPicture(id);
+        }
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                PICTURE,                                 // Tabel
+                new String[] {                          // Kolommen
+                        "id",
+                        "path"
+                },
+                "path = ?",                               // Where
+                new String[] { String.valueOf(path) },    // Where-params
+                null,                                   // Group By
+                null,                                   // Having
+                null,                                   // Sorting
+                null                                    // Dunno
+        );
+
+        Picture obj = new Picture();
+
+        if (cursor.moveToFirst()) {
+            obj.setId(cursor.getLong(0));
+            obj.setPath(cursor.getString(1));
+        }
+
+        cursor.close();
+        db.close();
+
+        return obj;
+    }
+
+    public boolean doesPicturePathExist(String path) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                PICTURE,                                 // Tabel
+                new String[] {                          // Kolommen
+                        "id",
+                        "path"
+                },
+                "path = ?",                               // Where
+                new String[] { String.valueOf(path) },    // Where-params
+                null,                                   // Group By
+                null,                                   // Having
+                null,                                   // Sorting
+                null                                    // Dunno
+        );
+
+        boolean result = false;
+        if (cursor.moveToFirst()) {
+            result = true;
+        }
+
+        cursor.close();
+        db.close();
+
+        return result;
     }
 
     public int getPicturesCount() {
@@ -832,7 +908,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return genericInsert(PEOPLE, obj);
     }
 
-    public boolean insertPeople(List<People> objects) {
+    public boolean insertPeoples(List<People> objects) {
         return genericInsertAll(PEOPLE, objects);
     }
 
@@ -910,7 +986,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null,    // Where-params
                 null,                                   // Group By
                 null,                                   // Having
-                null,                                   // Sorting
+                "name ASC",                                   // Sorting
                 null                                    // Dunno
         );
 
@@ -1065,6 +1141,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             obj.setTeamId(cursor.getLong(8));
             obj.setPeopleId(cursor.getLong(9));
             obj.setPictureId(cursor.getLong(10));
+
+            obj.setPerson(getPeople(obj.getPeopleId()));
+            obj.setTeam(getTeam(obj.getTeamId()));
+            obj.setPicture(getPicture(obj.getPictureId()));
         }
 
         cursor.close();
@@ -1072,6 +1152,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return obj;
     }
+
     public List<Member> getMembers(long teamId) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -1121,6 +1202,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
                 obj.setPerson(getPeople(obj.getPeopleId()));
                 obj.setTeam(getTeam(obj.getTeamId()));
+                obj.setPicture(getPicture(obj.getPictureId()));
 
                 members.add(obj);
             } while (cursor.moveToNext());
