@@ -5,13 +5,18 @@
 
     <item
         android:id="@+id/action_fight"
-        android:orderInCategory="100"
+        android:orderInCategory="1"
         android:icon="@drawable/fight_icon"
         app:showAsAction="ifRoom"
         android:title="@string/action_fight" />
     <item
+        android:id="@+id/action_about"
+        android:orderInCategory="2"
+        app:showAsAction="never"
+        android:title="@string/action_about" />
+    <item
         android:id="@+id/action_refresh"
-        android:orderInCategory="100"
+        android:orderInCategory="3"
         app:showAsAction="never"
         android:title="@string/action_refresh" />
 

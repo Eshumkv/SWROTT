@@ -4,13 +4,13 @@
 
     <item
         android:id="@+id/action_delete"
-        android:orderInCategory="100"
+        android:orderInCategory="1"
         android:icon="@drawable/delete_icon"
         app:showAsAction="ifRoom"
         android:title="@string/action_delete" />
     <item
         android:id="@+id/action_fight"
-        android:orderInCategory="100"
+        android:orderInCategory="2"
         android:icon="@drawable/fight_icon"
         app:showAsAction="ifRoom"
         android:title="@string/action_fight" />
