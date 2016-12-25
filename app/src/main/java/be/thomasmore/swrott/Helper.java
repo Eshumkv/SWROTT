@@ -1,5 +1,6 @@
 package be.thomasmore.swrott;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -44,11 +45,12 @@ import be.thomasmore.swrott.data.Stats;
  */
 public class Helper {
 
-    public static final int MAXTEAMS = 5;
+    public static final int MAXTEAMS = 7;
     public static final int MAXMEMBERS = 5;
 
     public final static String TEAMID_MESSAGE = "be.thomasmore.swrott.TEAMID_MESSAGE";
     public final static String MEMBERID_MESSAGE = "be.thomasmore.swrott.MEMBERID_MESSAGE";
+    public final static String OUTCOME_MESSAGE = "be.thomasmore.swrott.OUTCOME_MESSAGE";
 
     public final static Random _rand = new Random();
 
@@ -122,10 +124,41 @@ public class Helper {
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(c, cls);
                     c.startActivity(intent);
+                    ((Activity)c).finish();
                 }
             })
             .create()
             .show();
+    }
+
+    public static <T> void showErrorDialog(final Context c, @android.support.annotation.StringRes final int id, final Class<T> cls) {
+        new AlertDialog.Builder(c)
+                .setTitle(R.string.dialog_error_title)
+                .setMessage(id)
+                .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(c, cls);
+                        c.startActivity(intent);
+                        ((Activity)c).finish();
+                    }
+                })
+                .create()
+                .show();
+    }
+
+    public static <T> long getLongExtra(final Context c, String name, final Class<T> clsOnError) {
+        long result = ((Activity)c).getIntent().getLongExtra(name, -1);
+        if (result == -1) {
+            Log.e("HELPER ERROR", "Seriously don't know what to do");
+            if (clsOnError == null) {
+                Helper.showErrorDialog(c, MainActivity.class);
+            } else {
+                Helper.showErrorDialog(c, clsOnError);
+            }
+            return -1;
+        }
+        return result;
     }
 
     public static Bitmap getPicture(Context c, String path, int w, int h) {

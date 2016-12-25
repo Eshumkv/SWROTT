@@ -34,7 +34,7 @@ import be.thomasmore.swrott.data.Species;
 
 public class Splash extends AppCompatActivity {
 
-    private final int SPLASH_WAIT_TIME = 1500;
+    private final static int SPLASH_WAIT_TIME = 1500;
     private DatabaseHelper db;
 
     @Override
@@ -45,22 +45,22 @@ public class Splash extends AppCompatActivity {
         // Get a reference to the database
         db = new DatabaseHelper(this);
 
+        // See if we have a few items in the db
+        // If we have, we probably updated
+        if (db.getPlanetsCount() > 20) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    done();
+                    goToMain();
+                }
+            }, SPLASH_WAIT_TIME);
+            return;
+        }
+
         // If we don't have internet, what then??!
         if (!Helper.isInternetAvailable()) {
             // No internet :(
-
-            // See if we have a few items in the db
-            // If we have, we probably updated
-            if (db.getPlanetsCount() > 20) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        handlePictures();
-                        goToMain();
-                    }
-                }, SPLASH_WAIT_TIME);
-                return;
-            }
 
             // There is not enough data, maybe load the old data?
             // If not, there's nothing we can do.
@@ -94,7 +94,7 @@ public class Splash extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                handlePictures();
+                                done();
                                 goToMain();
                             }
                         }, SPLASH_WAIT_TIME);
@@ -218,10 +218,17 @@ public class Splash extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                handlePictures();
+                done();
                 results.add(true);
             }
         }, SPLASH_WAIT_TIME);
+    }
+
+    private void done() {
+        // Make sure the pictures are where they need to be
+        handlePictures();
+        // Delete any remaining SYSTEM teams and members
+        db.cleanUpTeamAndMembers();
     }
 
     private void handlePictures() {

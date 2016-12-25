@@ -40,15 +40,12 @@ public class EditTeamActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        long teamId = getIntent().getLongExtra(Helper.TEAMID_MESSAGE, -1);
+        long teamId = Helper.getLongExtra(this, Helper.TEAMID_MESSAGE, null);
 
-        if (teamId == -1) {
-            Log.e("ERROR", "Seriously don't know what to do");
-            Helper.showErrorDialog(this, MainActivity.class);
-            return;
-        }
+        if (teamId == -1) return;
 
         _db = new DatabaseHelper(this);
+
         setup(teamId);
     }
 

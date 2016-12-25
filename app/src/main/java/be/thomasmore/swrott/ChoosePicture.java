@@ -34,12 +34,10 @@ public class ChoosePicture extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        _memberId = getIntent().getLongExtra(Helper.MEMBERID_MESSAGE, -1);
-        if (_memberId == -1) {
-            Log.e("ERROR", "Seriously don't know what to do");
-            Helper.showErrorDialog(this, MainActivity.class);
-            return;
-        }
+        _memberId = Helper.getLongExtra(this, Helper.MEMBERID_MESSAGE, null);
+
+        if (_memberId == -1) return;
+
         _db = new DatabaseHelper(this);
         _member = _db.getMember(_memberId);
 

@@ -23,6 +23,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import be.thomasmore.swrott.data.DatabaseHelper;
+import be.thomasmore.swrott.data.FightHelper;
 import be.thomasmore.swrott.data.Member;
 import be.thomasmore.swrott.data.People;
 import be.thomasmore.swrott.data.Stats;
@@ -45,15 +46,11 @@ public class AddMember extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        _teamId = getIntent().getLongExtra(Helper.TEAMID_MESSAGE, -1);
+        _teamId = Helper.getLongExtra(this, Helper.TEAMID_MESSAGE, null);
+
+        if (_teamId == -1) return;
+
         _peoplePos = -1;
-
-        if (_teamId == -1) {
-            Log.e("ERROR", "Seriously don't know what to do");
-            Helper.showErrorDialog(this, MainActivity.class);
-            return;
-        }
-
         _db = new DatabaseHelper(this);
         _people = _db.getAllPeople();
         _currentMembers = _db.getMembers(_teamId);
@@ -133,22 +130,13 @@ public class AddMember extends AppCompatActivity {
             return _cachedStats.get(charId);
         }
 
-        Stats stats = new Stats();
+        int lvl = 1;
 
-        stats.setSpeed(Helper.randomBetween(8, 20));
-        stats.setAttack(Helper.randomBetween(8, 20));
-        stats.setDefense(Helper.randomBetween(8, 20));
+        // level has a 5% chance to be a level higher
+        if (Helper.randomBetween(0, 100) >= 95)
+            lvl++;
 
-        stats.setHealthPoints(Helper.randomBetween(20, 40));
-        stats.setExperience(0);
-        stats.setExpToLevel(Helper.randomBetween(8, 20));
-
-        // level has a 1% chance to be a level higher
-        if (Helper.randomBetween(0, 100) == 100)
-            stats.setLevel(2);
-        else
-            stats.setLevel(1);
-
+        Stats stats = FightHelper.getRandomStats(lvl);
         _cachedStats.put(charId, stats);
 
         return stats;

@@ -21,6 +21,8 @@ public class Member {
     private long peopleId;
     private long pictureId;
 
+    private boolean isSystemEntity;
+
     private Team team;
     private People person;
     private Picture picture;
@@ -166,6 +168,14 @@ public class Member {
         }
 
         return stats;
+    }
+
+    public boolean isSystemEntity() {
+        return isSystemEntity;
+    }
+
+    public void setSystemEntity(boolean systemEntity) {
+        isSystemEntity = systemEntity;
     }
 
     @Override

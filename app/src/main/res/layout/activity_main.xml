@@ -44,6 +44,7 @@
                 android:text="@string/list_team_header"
                 android:textSize="@dimen/textSize"
                 android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
                 android:layout_marginBottom="2dp"
                 android:layout_marginTop="@dimen/normal_margin"
                 android:id="@+id/textView" />
@@ -68,6 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/normal_margin"
+            android:layout_marginStart="@dimen/normal_margin"
             android:layout_below="@+id/header"
             android:layout_above="@+id/make_team">
         </ListView>

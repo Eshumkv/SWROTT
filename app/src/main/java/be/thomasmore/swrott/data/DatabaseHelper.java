@@ -16,7 +16,7 @@ import java.util.List;
  * Created by koenv on 11-12-2016.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 16;
+    private static final int DATABASE_VERSION = 17;
     private static final String DATABASE_NAME = "swrott";
 
     private static final String PLANET = "Planet";
@@ -103,6 +103,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "name TEXT," +
                 "planetId INTEGER," +
+                "isSystemEntity INTEGER," +
                 "FOREIGN KEY (planetId) REFERENCES " + PLANET + "(id)" +
                 ")");
 
@@ -120,6 +121,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "expToLevel INTEGER," +
                 "level INTEGER," +
                 "healthPoints INTEGER," +
+                "isSystemEntity INTEGER," +
                 "teamId INTEGER," +
                 "peopleId INTEGER," +
                 "pictureId INTEGER," +
@@ -192,6 +194,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("id", team.getId());
         values.put("name", team.getName());
         values.put("planetId", team.getPlanetId());
+        values.put("isSystemEntity", team.isSystemEntity() ? 1 : 0);
 
         return values;
     }
@@ -217,6 +220,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("expToLevel", member.getExpToLevel());
         values.put("level", member.getLevel());
         values.put("healthPoints", member.getHealthPoints());
+        values.put("isSystemEntity", member.isSystemEntity() ? 1 : 0);
         values.put("pictureId", member.getPictureId());
         values.put("teamId", member.getTeamId());
         values.put("peopleId", member.getPeopleId());
@@ -370,7 +374,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public int genericGetCount(String table) {
+    private int genericGetCount(String table) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(
                 table,                               // Tabel
@@ -390,6 +394,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return aantal;
+    }
+
+    public void cleanUpTeamAndMembers() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(TEAM, "isSystemEntity=?", new String[] { String.valueOf(1) });
+        db.delete(MEMBER, "isSystemEntity=?", new String[] { String.valueOf(1) });
+
+        db.close();
     }
 
     //=======================
@@ -541,6 +554,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return genericInsert(TEAM, obj);
     }
 
+    public Team insertTeamFull(Team obj) {
+        obj.setId(genericInsert(TEAM, obj));
+
+        if (obj.getId() != -1) {
+            for (Member m : obj.getMembers()) {
+                m.setId(genericInsert(MEMBER, m));
+            }
+        }
+
+        return obj;
+    }
+
+
     // -- Read
     public Team getTeam(long id) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -550,7 +576,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[] {                          // Kolommen
                         "id",
                         "name",
-                        "planetId"
+                        "planetId",
+                        "isSystemEntity"
                 },
                 "id = ?",                               // Where
                 new String[] { String.valueOf(id) },    // Where-params
@@ -566,12 +593,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             obj.setId(cursor.getLong(0));
             obj.setName(cursor.getString(1));
             obj.setPlanetId(cursor.getLong(2));
+            obj.setSystemEntity((cursor.getInt(3) == 1) ? true : false);
         }
 
         cursor.close();
         db.close();
 
         return obj;
+    }
+
+    public Team getTeamFull(long id) {
+        Team team = getTeam(id);
+        team.setMembers(getMembers(team.getId()));
+        return team;
+    }
+
+    public List<Team> getAllTeamsWithMembers() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                MEMBER,                                 // Tabel
+                new String[] {                          // Kolommen
+                        "teamId"
+                },
+                null,                               // Where
+                null,    // Where-params
+                "teamId",                                   // Group By
+                null,                                   // Having
+                null,                                   // Sorting
+                null                                    // Dunno
+        );
+
+        List<Team> members = new ArrayList<>();
+
+        if (cursor.moveToFirst()) {
+            do {
+                members.add(getTeam(cursor.getLong(0)));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return members;
     }
 
     public List<Team> getAllTeams() {
@@ -582,7 +646,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[] {                          // Kolommen
                         "id",
                         "name",
-                        "planetId"
+                        "planetId",
+                        "isSystemEntity"
                 },
                 null,                                   // Where
                 null,                                   // Where-params
@@ -601,6 +666,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 obj.setId(cursor.getLong(0));
                 obj.setName(cursor.getString(1));
                 obj.setPlanetId(cursor.getLong(2));
+                obj.setSystemEntity((cursor.getInt(3) == 1) ? true : false);
 
                 obj.setPlanet(getPlanet(obj.getPlanetId()));
 
@@ -636,6 +702,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     public boolean deleteAllTeams() {
         return genericDeleteAll(TEAM);
+    }
+
+    public int getAverageLevelOfTeam(long teamId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                MEMBER,                                 // Tabel
+                new String[] {                          // Kolommen
+                        "AVG(level)",
+                },
+                "teamId = ?",                               // Where
+                new String[] { String.valueOf(teamId) },    // Where-params
+                null,                                   // Group By
+                null,                                   // Having
+                null,                                   // Sorting
+                null                                    // Dunno
+        );
+
+        int avg = 0;
+
+        if (cursor.moveToFirst()) {
+            cursor.getLong(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return avg;
     }
 
 
@@ -1115,6 +1209,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "expToLevel",
                         "level",
                         "healthPoints",
+                        "isSystemEntity",
                         "teamId",
                         "peopleId",
                         "pictureId"
@@ -1138,9 +1233,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             obj.setExpToLevel(cursor.getInt(5));
             obj.setLevel(cursor.getInt(6));
             obj.setHealthPoints(cursor.getInt(7));
-            obj.setTeamId(cursor.getLong(8));
-            obj.setPeopleId(cursor.getLong(9));
-            obj.setPictureId(cursor.getLong(10));
+            obj.setSystemEntity((cursor.getInt(8) == 1) ? true : false);
+            obj.setTeamId(cursor.getLong(9));
+            obj.setPeopleId(cursor.getLong(10));
+            obj.setPictureId(cursor.getLong(11));
 
             obj.setPerson(getPeople(obj.getPeopleId()));
             obj.setTeam(getTeam(obj.getTeamId()));
@@ -1167,6 +1263,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "expToLevel",
                         "level",
                         "healthPoints",
+                        "isSystemEntity",
                         "teamId",
                         "peopleId",
                         "pictureId"
@@ -1182,7 +1279,72 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<Member> members = new ArrayList<>();
 
         if (cursor.moveToFirst()) {
+            do {
+                Member obj = new Member();
+
+                obj.setId(cursor.getLong(0));
+                obj.setSpeed(cursor.getInt(1));
+                obj.setAttack(cursor.getInt(2));
+                obj.setDefense(cursor.getInt(3));
+                obj.setExperience(cursor.getInt(4));
+                obj.setExpToLevel(cursor.getInt(5));
+                obj.setLevel(cursor.getInt(6));
+                obj.setHealthPoints(cursor.getInt(7));
+                obj.setSystemEntity((cursor.getInt(8) == 1) ? true : false);
+                obj.setTeamId(cursor.getLong(9));
+                obj.setPeopleId(cursor.getLong(10));
+                obj.setPictureId(cursor.getLong(11));
+
+                obj.setPerson(getPeople(obj.getPeopleId()));
+                obj.setTeam(getTeam(obj.getTeamId()));
+                obj.setPicture(getPicture(obj.getPictureId()));
+
+                members.add(obj);
+            } while (cursor.moveToNext());
         }
+
+        cursor.close();
+        db.close();
+
+        return members;
+    }
+
+    private List<Member> getAllMembers() {
+        return _getAllMembers(true);
+    }
+
+    private List<Member> getAllMembersNonFull() {
+        return _getAllMembers(false);
+    }
+
+    private List<Member> _getAllMembers(boolean full) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                MEMBER,                                 // Tabel
+                new String[] {                          // Kolommen
+                        "id",
+                        "speed",
+                        "attack",
+                        "defense",
+                        "experience",
+                        "expToLevel",
+                        "level",
+                        "healthPoints",
+                        "isSystemEntity",
+                        "teamId",
+                        "peopleId",
+                        "pictureId"
+                },
+                null,                               // Where
+                null,    // Where-params
+                null,                                   // Group By
+                null,                                   // Having
+                null,                                   // Sorting
+                null                                    // Dunno
+        );
+
+        List<Member> members = new ArrayList<>();
 
         if (cursor.moveToFirst()) {
             do {
@@ -1196,13 +1358,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 obj.setExpToLevel(cursor.getInt(5));
                 obj.setLevel(cursor.getInt(6));
                 obj.setHealthPoints(cursor.getInt(7));
-                obj.setTeamId(cursor.getLong(8));
-                obj.setPeopleId(cursor.getLong(9));
-                obj.setPictureId(cursor.getLong(10));
+                obj.setSystemEntity((cursor.getInt(8) == 1) ? true : false);
+                obj.setTeamId(cursor.getLong(9));
+                obj.setPeopleId(cursor.getLong(10));
+                obj.setPictureId(cursor.getLong(11));
 
-                obj.setPerson(getPeople(obj.getPeopleId()));
-                obj.setTeam(getTeam(obj.getTeamId()));
-                obj.setPicture(getPicture(obj.getPictureId()));
+                if (full) {
+                    obj.setPerson(getPeople(obj.getPeopleId()));
+                    obj.setTeam(getTeam(obj.getTeamId()));
+                    obj.setPicture(getPicture(obj.getPictureId()));
+                }
 
                 members.add(obj);
             } while (cursor.moveToNext());

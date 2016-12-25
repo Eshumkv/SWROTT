@@ -5,30 +5,36 @@
     android:layout_height="match_parent"
     tools:context="be.thomasmore.swrott.Splash">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/starwars"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/splash_starwars"
+            android:gravity="center"
+            android:layout_alignParentTop="true"
             style="@style/rottTheme.splashtext" />
 
         <ImageView
             android:id="@+id/splashscreen"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:src="@drawable/splash" />
+            android:layout_height="match_parent"
+            android:src="@drawable/splash"
+            android:layout_below="@+id/starwars"
+            android:layout_above="@+id/rott"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/rott"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/splash_title"
-            style="@style/rottTheme.splashtext" />
+            android:gravity="center"
+            style="@style/rottTheme.splashtext"
+            android:layout_alignParentBottom="true"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
