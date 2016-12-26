@@ -107,8 +107,8 @@ public class EditTeamActivity extends AppCompatActivity {
 
         final int oneTeamLevel = Member.MAX_EV / Team.MAX_LEVEL;
         final int teamExp = _team.getTeamExperience();
-        final int teamLevel = Math.max(teamExp / oneTeamLevel, 1);
-        int progress = teamExp - (oneTeamLevel * teamLevel);
+        final int teamLevel = Math.max((int) Math.ceil(teamExp / (double) oneTeamLevel), 1);
+        int progress = teamExp - (oneTeamLevel * (teamLevel - 1));
 
         if (teamLevel == 1)
             progress = teamExp;
