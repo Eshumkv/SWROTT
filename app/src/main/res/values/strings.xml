@@ -56,5 +56,10 @@
 
     <string name="fight_start_title">Who do you choose to fight with?</string>
     <string name="fight_fight">Fight</string>
+    <string name="fight_vs">VS</string>
+
+    <string name="fight_result_result">Result</string>
+    <string name="fight_result_winner">Winner</string>
+    <string name="fight_result_view_log">View log</string>
 
 </resources>

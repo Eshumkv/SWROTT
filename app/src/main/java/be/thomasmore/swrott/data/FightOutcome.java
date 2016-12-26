@@ -19,6 +19,7 @@ public class FightOutcome implements Serializable {
     private HashMap<Long, Integer> experience;
 
     private List<String> log;
+    private List<FightOutcomeDeath> deaths;
 
     public long getWinner() {
         return winner;
@@ -66,5 +67,13 @@ public class FightOutcome implements Serializable {
 
     public void setExperience(HashMap<Long, Integer> experience) {
         this.experience = experience;
+    }
+
+    public List<FightOutcomeDeath> getDeaths() {
+        return deaths;
+    }
+
+    public void setDeaths(List<FightOutcomeDeath> deaths) {
+        this.deaths = deaths;
     }
 }

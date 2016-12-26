@@ -178,6 +178,14 @@ public class Member {
         isSystemEntity = systemEntity;
     }
 
+    public void addExperience(int amount) {
+        experience += amount;
+
+        while (experience >= expToLevel) {
+            setStats(FightHelper.levelup(getStats()));
+        }
+    }
+
     @Override
     public String toString() {
         return this.getPerson().getName() + " - Lvl " + this.level;

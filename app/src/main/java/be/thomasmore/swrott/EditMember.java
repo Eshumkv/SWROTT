@@ -127,6 +127,12 @@ public class EditMember extends AppCompatActivity {
             case R.id.action_delete:
                 showDeleteDialog();
                 return true;
+            case R.id.action_fight:
+                Intent intent = new Intent(this, StartFight.class);
+                intent.putExtra(Helper.TEAMID_MESSAGE, _member.getTeamId());
+                startActivity(intent);
+                finish();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -46,7 +46,7 @@ import be.thomasmore.swrott.data.Stats;
 public class Helper {
 
     public static final int MAXTEAMS = 7;
-    public static final int MAXMEMBERS = 5;
+    public static final int MAXMEMBERS = 6;
 
     public final static String TEAMID_MESSAGE = "be.thomasmore.swrott.TEAMID_MESSAGE";
     public final static String MEMBERID_MESSAGE = "be.thomasmore.swrott.MEMBERID_MESSAGE";
@@ -210,26 +210,113 @@ public class Helper {
     public static String getRandomTeamName() {
         final Random random = new Random();
         final String[] part1 = {
-                "Midnight",
+                // A
                 "Awesome",
+                // B
                 "Bespin",
-                "Raging",
-                "Delta",
-                "Lightning",
+                "Black",
+                // C
                 "Cloud",
+                "Cold",
+                // D
+                "Dancing",
+                "Delta",
+                // E
+                // F
+                "Fighting",
+                "Fire",
+                "Flash",
+                // G
+                "Gritty",
+                // H
+                "Hot",
+                // I
+                "Ice",
+                // J
+                // K
+                // L
+                "Lightning",
+                "Lingering",
+                // M
+                "Midnight",
+                // N
+                "Night",
+                // O
+                // P
+                "Pink",
+                "Poison",
+                // Q
+                // R
+                "Raging",
+                "Red",
+                "Rocky",
+                // S
+                "Silent",
                 "Sky",
-                "Dancing"
+                "Steel Leather",
+                "Striking",
+                // T
+                // U
+                // V
+                "Venomous",
+                "Volley",
+                // W
+                // X
+                // Y
+                "Yellow",
+                // Z
         };
         final String[] part2 = {
+                // A
+                "Addicts",
+                "Apes",
+                // B
+                "Bears",
+                "Beasties",
+                "Bombers",
+                // C
+                "Champions",
                 "Commandos",
-                "Wasps",
-                "Predators",
+                // D
+                // E
+                // F
+                // G
+                // H
+                "Hawks",
+                // I
+                // J
                 "Jedi",
-                "Sith",
-                "Wasps",
-                "Spiders",
+                // K
+                // L
+                "Lunatics",
+                // M
+                "Monkeys",
+                // N
+                // O
+                // P
+                "Predators",
+                // Q
+                // R
+                // S
                 "Sabers",
-                "Speeders"
+                "Scorpions",
+                "Sharks",
+                "Sharpshooters",
+                "Sith",
+                "Slayers",
+                "Speeders",
+                "Spiders",
+                "Stingers",
+                // T
+                "Turtles",
+                // U
+                // V
+                // W
+                "Wasps",
+                "Widows",
+                // X
+                // Y
+                // Z
         };
 
         StringBuilder sb = new StringBuilder();

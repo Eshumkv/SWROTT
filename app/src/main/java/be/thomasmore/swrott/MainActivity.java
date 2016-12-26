@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
         db = new DatabaseHelper(this);
 
+        db.cleanUpTeamAndMembers();
+
         teams = db.getAllTeams();
         planets = db.getAllPlanets();
 

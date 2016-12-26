@@ -16,7 +16,7 @@ import java.util.List;
  * Created by koenv on 11-12-2016.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 18;
     private static final String DATABASE_NAME = "swrott";
 
     private static final String PLANET = "Planet";
@@ -616,8 +616,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[] {                          // Kolommen
                         "teamId"
                 },
-                null,                               // Where
-                null,    // Where-params
+                "isSystemEntity=?",                               // Where
+                new String[] { String.valueOf(0) },    // Where-params
                 "teamId",                                   // Group By
                 null,                                   // Having
                 null,                                   // Sorting

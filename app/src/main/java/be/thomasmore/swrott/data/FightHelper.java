@@ -17,18 +17,57 @@ public class FightHelper {
     public static Random _rand = new Random();
 
     public static Stats getRandomStats(int level) {
+        int speed = randomBetween(1, 2);
+        if (hasPercentChance(15))
+            speed = 3;
+
+        int attack = randomBetween(4, 13);
+        int defense = randomBetween(2, 7);
+
         Stats stats = new Stats();
 
-        stats.setSpeed(randomBetween(8, 20));
-        stats.setAttack(randomBetween(8, 20));
-        stats.setDefense(randomBetween(8, 20));
+        stats.setLevel(1);
+        stats.setSpeed(speed);
+        stats.setAttack(attack);
+        stats.setDefense(defense);
 
-        stats.setHealthPoints(randomBetween(20, 40));
         stats.setExperience(0);
-        stats.setExpToLevel(randomBetween(8, 20));
-        stats.setLevel(level);
+        stats.setHealthPoints(calculateHp(stats));
+        stats.setExpToLevel(calculateExpToLevel(stats));
+
+        // Level up to specific level
+        for (int i = 1; i < level; i++) {
+            stats = levelup(stats);
+        }
 
         return stats;
+    }
+
+    public static Stats levelup(Stats stats) {
+        int level = stats.getLevel();
+        stats.setLevel(level + 1);
+        stats.setSpeed(stats.getSpeed() + randomBetween(1, level));
+        stats.setAttack(stats.getAttack() + randomBetween(1, level));
+        stats.setDefense(stats.getDefense() + randomBetween(1, level));
+
+        stats.setHealthPoints(calculateHp(stats));
+        stats.setExpToLevel(calculateExpToLevel(stats));
+
+        return stats;
+    }
+
+    private static int calculateHp(Stats stats) {
+        int mod = Math.max(1, (int)Math.floor(stats.getLevel() * 0.25));
+        int hp = stats.getDefense() * 4 * mod;
+
+        return hp;
+    }
+
+    private static int calculateExpToLevel(Stats stats) {
+        if (stats.getLevel() == 1)
+            return randomBetween(8, 20);
+
+        return stats.getExpToLevel() * stats.getLevel();
     }
 
     public static Team getEnemy(final Team fullTeam, List<People> peopleList) {
@@ -78,6 +117,7 @@ public class FightHelper {
         }
 
         List<String> log = new ArrayList<>();
+        List<FightOutcomeDeath> deaths = new ArrayList<>();
         HashMap<Long, Integer> exp = new HashMap<>();
 
         List<Member> c_members = sortBySpeed(challenger);
@@ -102,11 +142,17 @@ public class FightHelper {
             if (fighter1GoesFirst(c_combatant, o_combatant)) {
                 o_combatant.setHealthPoints(o_combatant.getHealthPoints() - c_damage);
                 exp = addToExpMap(exp, o_combatant.getId());
-                log.add(String.format("%s -%dHP", o_combatant.getPerson().getName(), c_damage));
+                log.add(String.format(
+                        "%s (%s) -%dHP",
+                        o_combatant.getPerson().getName(),
+                        opponent.getName(),
+                        c_damage
+                ));
 
                 if (o_combatant.getHealthPoints() <= 0) {
                     o_index++;
                     c_score++;
+                    deaths.add(new FightOutcomeDeath(o_combatant.getId(), opponent.getId()));
 
                     if (o_index >= o_members.size()) {
                         // Challenger is the winner
@@ -119,11 +165,17 @@ public class FightHelper {
 
                 c_combatant.setHealthPoints(c_combatant.getHealthPoints() - o_damage);
                 exp = addToExpMap(exp, c_combatant.getId());
-                log.add(String.format("%s -%dHP", c_combatant.getPerson().getName(), o_damage));
+                log.add(String.format(
+                        "%s (%s) -%dHP",
+                        c_combatant.getPerson().getName(),
+                        challenger.getName(),
+                        o_damage
+                ));
 
                 if (c_combatant.getHealthPoints() <= 0) {
                     c_index++;
                     o_score++;
+                    deaths.add(new FightOutcomeDeath(c_combatant.getId(), challenger.getId()));
 
                     if (c_index >= c_members.size()) {
                         // Opponent is the winner
@@ -136,11 +188,17 @@ public class FightHelper {
             } else {
                 c_combatant.setHealthPoints(c_combatant.getHealthPoints() - o_damage);
                 exp = addToExpMap(exp, c_combatant.getId());
-                log.add(String.format("%s -%dHP", c_combatant.getPerson().getName(), o_damage));
+                log.add(String.format(
+                        "%s (%s) -%dHP",
+                        c_combatant.getPerson().getName(),
+                        challenger.getName(),
+                        o_damage
+                ));
 
                 if (c_combatant.getHealthPoints() <= 0) {
                     c_index++;
                     o_score++;
+                    deaths.add(new FightOutcomeDeath(c_combatant.getId(), challenger.getId()));
 
                     if (c_index >= c_members.size()) {
                         // Opponent is the winner
@@ -153,11 +211,17 @@ public class FightHelper {
 
                 o_combatant.setHealthPoints(o_combatant.getHealthPoints() - c_damage);
                 exp = addToExpMap(exp, o_combatant.getId());
-                log.add(String.format("%s -%dHP", o_combatant.getPerson().getName(), c_damage));
+                log.add(String.format(
+                        "%s (%s) -%dHP",
+                        o_combatant.getPerson().getName(),
+                        opponent.getName(),
+                        c_damage
+                ));
 
                 if (o_combatant.getHealthPoints() <= 0) {
                     o_index++;
                     c_score++;
+                    deaths.add(new FightOutcomeDeath(o_combatant.getId(), opponent.getId()));
 
                     if (o_index >= o_members.size()) {
                         // Challenger is the winner
@@ -172,20 +236,30 @@ public class FightHelper {
 
         result.setLog(log);
         result.setExperience(exp);
+        result.setDeaths(deaths);
 
         if (cIsWinner) {
+            c_score += 3;
             result.setWinner(challenger.getId());
             result.setWinnerScore(c_score);
 
             result.setLoser(opponent.getId());
             result.setLoserScore(o_score);
         } else {
+            o_score += 3;
             result.setWinner(opponent.getId());
             result.setWinnerScore(o_score);
 
             result.setLoser(challenger.getId());
             result.setLoserScore(c_score);
         }
+
+        // Reset the healthpoints for all the members
+        for (Member m : challenger.getMembers())
+            m.setHealthPoints(calculateHp(m.getStats()));
+
+        for (Member m : opponent.getMembers())
+            m.setHealthPoints(calculateHp(m.getStats()));
 
         return result;
     }
@@ -199,22 +273,65 @@ public class FightHelper {
         return map;
     }
 
-    private static int getDamage(Member fighter1, Member fighter2) {
-        return 10;
+    private static int getDamage(Member attacker, Member defender) {
+        double mod = 1;
+        int chanceToCrit = 10;
+
+        // Attacker is higher level, so he has more chance to crit
+        // Crit chance: 30%
+        // Attacker is _LOWER_ level, so less chance
+        // Crit chance: 5%
+        if (attacker.getLevel() > defender.getLevel()) {
+            chanceToCrit = 30;
+        } else if (attacker.getLevel() < defender.getLevel()) {
+            chanceToCrit = 5;
+        }
+
+        // Is it a crit?
+        if (hasPercentChance(chanceToCrit))
+            mod += 0.5;
+
+        int attackRoll = randomBetween(0, attacker.getAttack());
+        int defenseRoll = randomBetween(0, defender.getDefense());
+
+        int baseDamage = attacker.getAttack() / 2;
+        int chanceToMiss = 25;
+
+        // Is it a glancing blow or a miss?
+        if (attackRoll < defenseRoll) {
+            if (hasPercentChance(chanceToMiss)) {
+                // miss
+                return 0;
+            } else {
+                // Glancing blow
+                baseDamage = attacker.getAttack() / 4;
+            }
+        } else if (attackRoll == defenseRoll) {
+            if (hasPercentChance(50))
+                baseDamage = attacker.getAttack() / 2;
+            else {
+                if (hasPercentChance(chanceToMiss)) {
+                    // miss
+                    return 0;
+                } else {
+                    // Glancing blow
+                    baseDamage = attacker.getAttack() / 4;
+                }
+            }
+        }
+
+        int damage = baseDamage +
+                Math.max(attacker.getAttack() - defender.getDefense(), 0);
+        damage *= mod;
+
+        return damage;
     }
 
     private static boolean fighter1GoesFirst(Member fighter1, Member fighter2) {
-        int f1Speed = getBaseSpeed(fighter1);
-        int f2Speed = getBaseSpeed(fighter2);
-
-        f1Speed += randomBetween(0, fighter1.getLevel());
-        f2Speed += randomBetween(0, fighter2.getLevel());
+        int f1Speed = randomBetween(0, fighter1.getSpeed());
+        int f2Speed = randomBetween(0, fighter2.getSpeed());
 
         return f1Speed > f2Speed;
-    }
-
-    private static int getBaseSpeed(Member member) {
-        return member.getSpeed();
     }
 
     private static List<Member> sortBySpeed(Team team) {
@@ -238,6 +355,10 @@ public class FightHelper {
             result = 1;
 
         return result;
+    }
+
+    private static boolean hasPercentChance(int percent) {
+        return randomBetween(0, 100) >= (100 - percent);
     }
 
     private static int randomBetween(int min, int max) {

@@ -12,6 +12,79 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/vs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fight_vs"
+            android:textStyle="bold"
+            android:textSize="@dimen/textSize_big"
+            android:layout_centerInParent="true"/>
+
+        <RelativeLayout
+            android:layout_above="@+id/vs"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/normal_margin">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="The Sith Destroyers"
+                    android:gravity="center"
+                    android:textSize="@dimen/textSize_title"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="@dimen/normal_margin"
+                    android:layout_marginStart="@dimen/normal_margin"
+                    android:layout_marginRight="@dimen/normal_margin"
+                    android:layout_marginEnd="@dimen/normal_margin"
+                    android:layout_marginBottom="2dp"
+                    android:id="@+id/fighter1_name" />
+
+                <include layout="@layout/fight_icons" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_below="@+id/vs"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/normal_margin">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="The Sith Destroyers"
+                    android:gravity="center"
+                    android:textSize="@dimen/textSize_title"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="@dimen/normal_margin"
+                    android:layout_marginStart="@dimen/normal_margin"
+                    android:layout_marginRight="@dimen/normal_margin"
+                    android:layout_marginEnd="@dimen/normal_margin"
+                    android:layout_marginBottom="2dp"
+                    android:id="@+id/fighter2_name" />
+
+                <include layout="@layout/fight_icons2" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -51,7 +51,8 @@
         </activity>
         <activity android:name=".Fight" />
         <activity android:name=".FightResult" />
-        <activity android:name=".FightDetails" />
+        <activity android:name=".FightDetails"
+            android:parentActivityName=".FightResult" />
         <activity android:name=".About"></activity>
     </application>
 
