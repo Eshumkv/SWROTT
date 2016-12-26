@@ -21,6 +21,7 @@
             android:background="@color/colorFighter1"
             android:layout_margin="@dimen/small_margin"
             android:src="@drawable/fighter1_icon"
+            android:padding="@dimen/small_margin"
             android:visibility="gone"  />
 
         <ImageView
@@ -31,6 +32,7 @@
             android:background="@color/colorFighter1"
             android:layout_margin="@dimen/small_margin"
             android:src="@drawable/fighter1_icon"
+            android:padding="@dimen/small_margin"
             android:visibility="gone"  />
 
         <ImageView
@@ -41,6 +43,7 @@
             android:background="@color/colorFighter1"
             android:layout_margin="@dimen/small_margin"
             android:src="@drawable/fighter1_icon"
+            android:padding="@dimen/small_margin"
             android:visibility="gone"  />
 
         <ImageView
@@ -51,6 +54,7 @@
             android:background="@color/colorFighter1"
             android:layout_margin="@dimen/small_margin"
             android:src="@drawable/fighter1_icon"
+            android:padding="@dimen/small_margin"
             android:visibility="gone"  />
 
     </LinearLayout>
@@ -69,6 +73,7 @@
             android:background="@color/colorFighter1"
             android:layout_margin="@dimen/small_margin"
             android:src="@drawable/fighter1_icon"
+            android:padding="@dimen/small_margin"
             android:visibility="gone" />
 
         <ImageView
@@ -79,6 +84,7 @@
             android:background="@color/colorFighter1"
             android:layout_margin="@dimen/small_margin"
             android:src="@drawable/fighter1_icon"
+            android:padding="@dimen/small_margin"
             android:visibility="gone"  />
 
         <ImageView
@@ -89,6 +95,7 @@
             android:background="@color/colorFighter1"
             android:layout_margin="@dimen/small_margin"
             android:src="@drawable/fighter1_icon"
+            android:padding="@dimen/small_margin"
             android:visibility="gone"  />
 
         <ImageView
@@ -99,6 +106,7 @@
             android:background="@color/colorFighter1"
             android:layout_margin="@dimen/small_margin"
             android:src="@drawable/fighter1_icon"
+            android:padding="@dimen/small_margin"
             android:visibility="gone"  />
 
     </LinearLayout>
