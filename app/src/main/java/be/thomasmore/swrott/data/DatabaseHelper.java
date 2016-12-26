@@ -16,7 +16,7 @@ import java.util.List;
  * Created by koenv on 11-12-2016.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 18;
+    private static final int DATABASE_VERSION = 20;
     private static final String DATABASE_NAME = "swrott";
 
     private static final String PLANET = "Planet";
@@ -117,6 +117,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "speed INTEGER," +
                 "attack INTEGER," +
                 "defense INTEGER," +
+                "base_speed INTEGER," +
+                "base_attack INTEGER," +
+                "base_defense INTEGER," +
+                "base_hp INTEGER," +
+                "iv_speed INTEGER," +
+                "iv_attack INTEGER," +
+                "iv_defense INTEGER," +
+                "iv_hp INTEGER," +
+                "ev_speed INTEGER," +
+                "ev_attack INTEGER," +
+                "ev_defense INTEGER," +
+                "ev_hp INTEGER," +
                 "experience INTEGER," +
                 "expToLevel INTEGER," +
                 "level INTEGER," +
@@ -213,13 +225,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put("id", member.getId());
+
+        values.put("base_speed", member.getBase_speed());
+        values.put("base_attack", member.getBase_attack());
+        values.put("base_defense", member.getBase_defense());
+        values.put("base_hp", member.getBase_hp());
+
+        values.put("iv_speed", member.getIv_speed());
+        values.put("iv_attack", member.getIv_attack());
+        values.put("iv_defense", member.getIv_attack());
+        values.put("iv_hp", member.getIv_hp());
+
+        values.put("ev_speed", member.getEv_speed());
+        values.put("ev_attack", member.getEv_attack());
+        values.put("ev_defense", member.getEv_defense());
+        values.put("ev_hp", member.getEv_hp());
+
         values.put("speed", member.getSpeed());
         values.put("attack", member.getAttack());
         values.put("defense", member.getDefense());
+        values.put("healthPoints", member.getHealthPoints());
+
         values.put("experience", member.getExperience());
         values.put("expToLevel", member.getExpToLevel());
         values.put("level", member.getLevel());
-        values.put("healthPoints", member.getHealthPoints());
         values.put("isSystemEntity", member.isSystemEntity() ? 1 : 0);
         values.put("pictureId", member.getPictureId());
         values.put("teamId", member.getTeamId());
@@ -1212,7 +1241,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "isSystemEntity",
                         "teamId",
                         "peopleId",
-                        "pictureId"
+                        "pictureId",
+                        "base_speed",
+                        "base_attack",
+                        "base_defense",
+                        "iv_speed",
+                        "iv_attack",
+                        "iv_defense",
+                        "ev_speed",
+                        "ev_attack",
+                        "ev_defense",
+                        "base_hp",
+                        "iv_hp",
+                        "ev_hp"
                 },
                 "id = ?",                               // Where
                 new String[] { String.valueOf(id) },    // Where-params
@@ -1237,6 +1278,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             obj.setTeamId(cursor.getLong(9));
             obj.setPeopleId(cursor.getLong(10));
             obj.setPictureId(cursor.getLong(11));
+
+            obj.setBase_speed(cursor.getInt(12));
+            obj.setBase_attack(cursor.getInt(13));
+            obj.setBase_defense(cursor.getInt(14));
+
+            obj.setIv_speed(cursor.getInt(15));
+            obj.setIv_attack(cursor.getInt(16));
+            obj.setIv_defense(cursor.getInt(17));
+
+            obj.setEv_speed(cursor.getInt(18));
+            obj.setEv_attack(cursor.getInt(19));
+            obj.setEv_defense(cursor.getInt(20));
+
+            obj.setBase_hp(cursor.getInt(21));
+            obj.setIv_hp(cursor.getInt(22));
+            obj.setEv_hp(cursor.getInt(23));
 
             obj.setPerson(getPeople(obj.getPeopleId()));
             obj.setTeam(getTeam(obj.getTeamId()));
@@ -1266,7 +1323,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "isSystemEntity",
                         "teamId",
                         "peopleId",
-                        "pictureId"
+                        "pictureId",
+                        "base_speed",
+                        "base_attack",
+                        "base_defense",
+                        "iv_speed",
+                        "iv_attack",
+                        "iv_defense",
+                        "ev_speed",
+                        "ev_attack",
+                        "ev_defense",
+                        "base_hp",
+                        "iv_hp",
+                        "ev_hp"
                 },
                 "teamId = ?",                               // Where
                 new String[] { String.valueOf(teamId) },    // Where-params
@@ -1294,6 +1363,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 obj.setTeamId(cursor.getLong(9));
                 obj.setPeopleId(cursor.getLong(10));
                 obj.setPictureId(cursor.getLong(11));
+
+                obj.setBase_speed(cursor.getInt(12));
+                obj.setBase_attack(cursor.getInt(13));
+                obj.setBase_defense(cursor.getInt(14));
+
+                obj.setIv_speed(cursor.getInt(15));
+                obj.setIv_attack(cursor.getInt(16));
+                obj.setIv_defense(cursor.getInt(17));
+
+                obj.setEv_speed(cursor.getInt(18));
+                obj.setEv_attack(cursor.getInt(19));
+                obj.setEv_defense(cursor.getInt(20));
+
+                obj.setBase_hp(cursor.getInt(21));
+                obj.setIv_hp(cursor.getInt(22));
+                obj.setEv_hp(cursor.getInt(23));
 
                 obj.setPerson(getPeople(obj.getPeopleId()));
                 obj.setTeam(getTeam(obj.getTeamId()));
@@ -1334,7 +1419,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "isSystemEntity",
                         "teamId",
                         "peopleId",
-                        "pictureId"
+                        "pictureId",
+                        "base_speed",
+                        "base_attack",
+                        "base_defense",
+                        "iv_speed",
+                        "iv_attack",
+                        "iv_defense",
+                        "ev_speed",
+                        "ev_attack",
+                        "ev_defense",
+                        "base_hp",
+                        "iv_hp",
+                        "ev_hp"
                 },
                 null,                               // Where
                 null,    // Where-params
@@ -1362,6 +1459,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 obj.setTeamId(cursor.getLong(9));
                 obj.setPeopleId(cursor.getLong(10));
                 obj.setPictureId(cursor.getLong(11));
+
+                obj.setBase_speed(cursor.getInt(12));
+                obj.setBase_attack(cursor.getInt(13));
+                obj.setBase_defense(cursor.getInt(14));
+
+                obj.setIv_speed(cursor.getInt(15));
+                obj.setIv_attack(cursor.getInt(16));
+                obj.setIv_defense(cursor.getInt(17));
+
+                obj.setEv_speed(cursor.getInt(18));
+                obj.setEv_attack(cursor.getInt(19));
+                obj.setEv_defense(cursor.getInt(20));
+
+                obj.setBase_hp(cursor.getInt(21));
+                obj.setIv_hp(cursor.getInt(22));
+                obj.setEv_hp(cursor.getInt(23));
 
                 if (full) {
                     obj.setPerson(getPeople(obj.getPeopleId()));

@@ -85,6 +85,23 @@ public class Team {
         return sum / members.size();
     }
 
+    public int getAverageBaseStats() {
+        if (members == null || members.size() == 0) {
+            return 0;
+        }
+
+        int sum = 0;
+
+        for (Member m : members) {
+            sum += m.getBase_attack();
+            sum += m.getBase_defense();
+            sum += m.getBase_hp();
+            sum += m.getBase_speed();
+        }
+
+        return sum / (members.size() * 4);
+    }
+
     @Override
     public String toString() {
         return name + " (" + planet.getName() + ")";

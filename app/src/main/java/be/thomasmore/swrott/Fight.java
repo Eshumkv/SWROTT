@@ -30,7 +30,7 @@ import be.thomasmore.swrott.data.Team;
 
 public class Fight extends AppCompatActivity {
 
-    private final static int WAIT_TIME = 8000*2;
+    private final static int WAIT_TIME = 7500;
 
     private DatabaseHelper _db;
     private Team _team;
@@ -67,10 +67,16 @@ public class Fight extends AppCompatActivity {
         // Fight against each other
         final FightOutcome outcome = FightHelper.fight(_team, enemy);
 
+        // Calculate the average base stats of the enemy team
+        // This will be added to the EVs of our team
+        int avgBaseStats = enemy.getAverageBaseStats();
+
         // Assign exp and all that jazz
         for (Member m : _team.getMembers()) {
             if (outcome.getExperience().containsKey(m.getId())) {
+                m.addEv(avgBaseStats);
                 m.addExperience(outcome.getExperience().get(m.getId()));
+
                 _db.updateMember(m);
             }
         }
@@ -139,7 +145,7 @@ public class Fight extends AppCompatActivity {
                     }
 
                     if (result) {
-                        SystemClock.sleep(time);
+                        SystemClock.sleep(time / 2);
                         break;
                     }
 

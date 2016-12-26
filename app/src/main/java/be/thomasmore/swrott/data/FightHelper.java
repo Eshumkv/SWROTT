@@ -1,5 +1,7 @@
 package be.thomasmore.swrott.data;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,26 +19,29 @@ public class FightHelper {
     public static Random _rand = new Random();
 
     public static Stats getRandomStats(int level) {
-        int speed = randomBetween(1, 2);
-        if (hasPercentChance(15))
-            speed = 3;
-
-        int attack = randomBetween(4, 13);
-        int defense = randomBetween(2, 7);
-
         Stats stats = new Stats();
 
-        stats.setLevel(1);
-        stats.setSpeed(speed);
-        stats.setAttack(attack);
-        stats.setDefense(defense);
+        stats.setIv_speed(randomBetween(0, 15));
+        stats.setIv_attack(randomBetween(0, 15));
+        stats.setIv_defense(randomBetween(0, 15));
+        stats.setIv_hp(randomBetween(0, 15));
 
+        stats.setBase_speed(randomBetween(0, 255));
+        stats.setBase_attack(randomBetween(0, 255));
+        stats.setBase_defense(randomBetween(0, 255));
+        stats.setBase_hp(randomBetween(0, 255));
+
+        stats.setEv_speed(randomBetween(0, 5));
+        stats.setEv_attack(randomBetween(0, 5));
+        stats.setEv_defense(randomBetween(0, 5));
+        stats.setEv_hp(randomBetween(0, 5));
+
+        stats.setLevel(0);
         stats.setExperience(0);
-        stats.setHealthPoints(calculateHp(stats));
-        stats.setExpToLevel(calculateExpToLevel(stats));
 
         // Level up to specific level
-        for (int i = 1; i < level; i++) {
+        // Run this at least once, so we get to calc our stats
+        for (int i = 0; i < level; i++) {
             stats = levelup(stats);
         }
 
@@ -44,12 +49,10 @@ public class FightHelper {
     }
 
     public static Stats levelup(Stats stats) {
-        int level = stats.getLevel();
-        stats.setLevel(level + 1);
-        stats.setSpeed(stats.getSpeed() + randomBetween(1, level));
-        stats.setAttack(stats.getAttack() + randomBetween(1, level));
-        stats.setDefense(stats.getDefense() + randomBetween(1, level));
-
+        stats.setLevel(stats.getLevel() + 1);
+        stats.setSpeed(calculateSpeed(stats));
+        stats.setAttack(calculateAttack(stats));
+        stats.setDefense(calculateDefense(stats));
         stats.setHealthPoints(calculateHp(stats));
         stats.setExpToLevel(calculateExpToLevel(stats));
 
@@ -57,17 +60,52 @@ public class FightHelper {
     }
 
     private static int calculateHp(Stats stats) {
-        int mod = Math.max(1, (int)Math.floor(stats.getLevel() * 0.25));
-        int hp = stats.getDefense() * 4 * mod;
-
-        return hp;
+        return calculateStat(
+                stats.getBase_hp(),
+                stats.getIv_hp(),
+                stats.getEv_hp(),
+                stats.getLevel()
+        ) + 5 + stats.getLevel();
     }
 
     private static int calculateExpToLevel(Stats stats) {
-        if (stats.getLevel() == 1)
-            return randomBetween(8, 20);
+        return stats.getLevel() * stats.getLevel() * stats.getLevel();
+    }
 
-        return stats.getExpToLevel() * stats.getLevel();
+    private static int calculateSpeed(Stats stats) {
+        return calculateStat(
+                stats.getBase_speed(),
+                stats.getIv_speed(),
+                stats.getEv_speed(),
+                stats.getLevel()
+        );
+    }
+
+    private static int calculateAttack(Stats stats) {
+        return calculateStat(
+                stats.getBase_attack(),
+                stats.getIv_attack(),
+                stats.getEv_attack(),
+                stats.getLevel()
+        );
+    }
+
+    private static int calculateDefense(Stats stats) {
+        return calculateStat(
+                stats.getBase_defense(),
+                stats.getIv_defense(),
+                stats.getEv_defense(),
+                stats.getLevel()
+        );
+    }
+
+    private static int calculateStat(int base, int iv, int ev, int level) {
+        int basePlusIv = base + iv;
+        int evSqrt4 = (int) (Math.sqrt(ev) / 4);
+        int top = (basePlusIv * 2 + evSqrt4) * level;
+        int result = top / 100;
+        result += 5;
+        return result;
     }
 
     public static Team getEnemy(final Team fullTeam, List<People> peopleList) {
@@ -116,12 +154,18 @@ public class FightHelper {
             return null;
         }
 
+        // Make some temp variables to hold all the info we need to give back
         List<String> log = new ArrayList<>();
         List<FightOutcomeDeath> deaths = new ArrayList<>();
         HashMap<Long, Integer> exp = new HashMap<>();
 
-        List<Member> c_members = sortBySpeed(challenger);
-        List<Member> o_members = sortBySpeed(opponent);
+        // Set the initial score to 0
+        int c_score = 0;
+        int o_score = 0;
+
+        // Shuffle the list and get the first fighter
+        List<Member> c_members = shuffleMembers(challenger);
+        List<Member> o_members = shuffleMembers(opponent);
 
         int c_index = 0;
         int o_index = 0;
@@ -129,111 +173,227 @@ public class FightHelper {
         Member c_combatant = c_members.get(c_index);
         Member o_combatant = o_members.get(o_index);
 
-        int c_score = 0;
-        int o_score = 0;
+        int c_exp = calculateExpGained(
+                randomBetween(0, 1) == 1,
+                o_combatant.getLevel(),
+                challenger.getMembers().size()
+        );
+        int o_exp = calculateExpGained(
+                randomBetween(0, 1) == 1,
+                c_combatant.getLevel(),
+                opponent.getMembers().size()
+        );
 
         boolean cIsWinner = true;
+        int round = 1;
+
+        log.add(String.format("%s VS %s", challenger.getName(), opponent.getName()));
+        log.add(              "--------------");
+        log.add(String.format("--- ROUND %d", round));
+        log.add(String.format("--- %s (%s) VS %s (%s)",
+                c_combatant.getPerson().getName(), challenger.getName(),
+                o_combatant.getPerson().getName(), opponent.getName()));
+        log.add(              "--------------");
 
         while(true) {
-            // Let the two fight
+            // Calculate the damage
             int c_damage = getDamage(c_combatant, o_combatant);
             int o_damage = getDamage(o_combatant, c_combatant);
 
+            // If challenger-team goes first
             if (fighter1GoesFirst(c_combatant, o_combatant)) {
+                log.add(String.format("-> %s", c_combatant.getPerson().getName()));
+
+                // Opponent takes damage,
+                // challenger gets experience
                 o_combatant.setHealthPoints(o_combatant.getHealthPoints() - c_damage);
-                exp = addToExpMap(exp, o_combatant.getId());
                 log.add(String.format(
-                        "%s (%s) -%dHP",
+                        "-%dHP %s (%d)",
+                        c_damage,
                         o_combatant.getPerson().getName(),
-                        opponent.getName(),
-                        c_damage
+                        o_combatant.getHealthPoints()
                 ));
 
+                // Did we kill the opponent?
                 if (o_combatant.getHealthPoints() <= 0) {
                     o_index++;
                     c_score++;
-                    deaths.add(new FightOutcomeDeath(o_combatant.getId(), opponent.getId()));
 
+                    deaths.add(new FightOutcomeDeath(o_combatant.getId(), opponent.getId()));
+                    log.add(String.format("⚔ %s", o_combatant.getPerson().getName()));
+
+                    // Give the current fighter some exp
+                    exp = addToExpMap(exp, c_combatant.getId(), c_exp);
+
+                    // There's no more opponents to fight
                     if (o_index >= o_members.size()) {
                         // Challenger is the winner
+                        log.add(              "--------------");
+                        log.add(              "--------------");
                         log.add(String.format("%s WIN", challenger.getName()));
                         cIsWinner = true;
                         break;
                     }
+
+                    // Next opponent
                     o_combatant = o_members.get(o_index);
+
+                    c_exp = calculateExpGained(
+                            randomBetween(0, 1) == 1,
+                            o_combatant.getLevel(),
+                            challenger.getMembers().size()
+                    );
+
+                    round++;
+                    log.add(              "--------------");
+                    log.add(String.format("--- ROUND %d", round));
+                    log.add(String.format("--- %s (%s) VS %s (%s)",
+                            c_combatant.getPerson().getName(), challenger.getName(),
+                            o_combatant.getPerson().getName(), opponent.getName()));
+                    log.add(              "--------------");
                 }
 
+                // Challenger takes damage
+                // Opponent gets experience
                 c_combatant.setHealthPoints(c_combatant.getHealthPoints() - o_damage);
-                exp = addToExpMap(exp, c_combatant.getId());
                 log.add(String.format(
-                        "%s (%s) -%dHP",
+                        "-%dHP %s (%d)",
+                        o_damage,
                         c_combatant.getPerson().getName(),
-                        challenger.getName(),
-                        o_damage
+                        c_combatant.getHealthPoints()
                 ));
 
+                // Did we kill the challenger?
                 if (c_combatant.getHealthPoints() <= 0) {
                     c_index++;
                     o_score++;
-                    deaths.add(new FightOutcomeDeath(c_combatant.getId(), challenger.getId()));
 
+                    deaths.add(new FightOutcomeDeath(c_combatant.getId(), challenger.getId()));
+                    log.add(String.format("⚔ %s", c_combatant.getPerson().getName()));
+
+                    // Give the current fighter some exp
+                    exp = addToExpMap(exp, o_combatant.getId(), o_exp);
+
+                    // There's no more opponents to fight
                     if (c_index >= c_members.size()) {
                         // Opponent is the winner
+                        log.add(              "--------------");
+                        log.add(              "--------------");
                         log.add(String.format("%s WIN", opponent.getName()));
                         cIsWinner = false;
                         break;
                     }
+
+                    // Next challenger
                     c_combatant = c_members.get(c_index);
+                    o_exp = calculateExpGained(
+                            randomBetween(0, 1) == 1,
+                            c_combatant.getLevel(),
+                            opponent.getMembers().size()
+                    );
+
+                    round++;
+                    log.add(              "--------------");
+                    log.add(String.format("--- ROUND %d", round));
+                    log.add(String.format("--- %s (%s) VS %s (%s)",
+                            c_combatant.getPerson().getName(), challenger.getName(),
+                            o_combatant.getPerson().getName(), opponent.getName()));
+                    log.add(              "--------------");
                 }
             } else {
+                // Fighter2 (Opponent) goes first
+                log.add(String.format("-> %s", o_combatant.getPerson().getName()));
+
+                // Challenger takes damage
                 c_combatant.setHealthPoints(c_combatant.getHealthPoints() - o_damage);
-                exp = addToExpMap(exp, c_combatant.getId());
                 log.add(String.format(
-                        "%s (%s) -%dHP",
+                        "-%dHP %s (%d)",
+                        o_damage,
                         c_combatant.getPerson().getName(),
-                        challenger.getName(),
-                        o_damage
+                        c_combatant.getHealthPoints()
                 ));
 
                 if (c_combatant.getHealthPoints() <= 0) {
                     c_index++;
                     o_score++;
+
                     deaths.add(new FightOutcomeDeath(c_combatant.getId(), challenger.getId()));
+                    log.add(String.format("⚔ %s", c_combatant.getPerson().getName()));
+
+                    // Give the current fighter some exp
+                    exp = addToExpMap(exp, o_combatant.getId(), o_exp);
 
                     if (c_index >= c_members.size()) {
                         // Opponent is the winner
+                        log.add(              "--------------");
+                        log.add(              "--------------");
                         log.add(String.format("%s WIN", opponent.getName()));
                         cIsWinner = false;
                         break;
                     }
                     c_combatant = c_members.get(c_index);
+                    o_exp = calculateExpGained(
+                            randomBetween(0, 1) == 1,
+                            c_combatant.getLevel(),
+                            opponent.getMembers().size()
+                    );
+
+                    round++;
+                    log.add(              "--------------");
+                    log.add(String.format("--- ROUND %d", round));
+                    log.add(String.format("--- %s (%s) VS %s (%s)",
+                            c_combatant.getPerson().getName(), challenger.getName(),
+                            o_combatant.getPerson().getName(), opponent.getName()));
+                    log.add(              "--------------");
                 }
 
+                // Opponent takes damage
                 o_combatant.setHealthPoints(o_combatant.getHealthPoints() - c_damage);
-                exp = addToExpMap(exp, o_combatant.getId());
                 log.add(String.format(
-                        "%s (%s) -%dHP",
+                        "-%dHP %s (%d)",
+                        c_damage,
                         o_combatant.getPerson().getName(),
-                        opponent.getName(),
-                        c_damage
+                        o_combatant.getHealthPoints()
                 ));
 
                 if (o_combatant.getHealthPoints() <= 0) {
                     o_index++;
                     c_score++;
+
                     deaths.add(new FightOutcomeDeath(o_combatant.getId(), opponent.getId()));
+                    log.add(String.format("⚔ %s", o_combatant.getPerson().getName()));
+
+                    // Give the current fighter some exp
+                    exp = addToExpMap(exp, c_combatant.getId(), c_exp);
 
                     if (o_index >= o_members.size()) {
                         // Challenger is the winner
+                        log.add(              "--------------");
+                        log.add(              "--------------");
                         log.add(String.format("%s WIN", challenger.getName()));
                         cIsWinner = true;
                         break;
                     }
                     o_combatant = o_members.get(o_index);
+                    c_exp = calculateExpGained(
+                            randomBetween(0, 1) == 1,
+                            o_combatant.getLevel(),
+                            challenger.getMembers().size()
+                    );
+
+                    round++;
+                    log.add(              "--------------");
+                    log.add(String.format("--- ROUND %d", round));
+                    log.add(String.format("--- %s (%s) VS %s (%s)",
+                            c_combatant.getPerson().getName(), challenger.getName(),
+                            o_combatant.getPerson().getName(), opponent.getName()));
+                    log.add(              "--------------");
                 }
             }
         }
 
+        // Fight is over, fill the return structure
+        // Winner gets +3 points!
         result.setLog(log);
         result.setExperience(exp);
         result.setDeaths(deaths);
@@ -264,16 +424,72 @@ public class FightHelper {
         return result;
     }
 
-    private static HashMap<Long, Integer> addToExpMap(HashMap<Long, Integer> map, long key) {
+    private static HashMap<Long, Integer> addToExpMap(HashMap<Long, Integer> map, long key, int exp) {
         if (map.containsKey(key))
-            map.put(key, map.get(key) + 1);
+            map.put(key, map.get(key) + exp);
         else
-            map.put(key, 1);
+            map.put(key, exp);
 
         return map;
     }
 
+    private static int calculateExpGained(boolean isWild, int loserLevel, int numMembers) {
+        // 1 if wild, 1.5 if owned by trainer
+        // We just randomize it
+        double a = isWild ? 1 : 1.5;
+
+        // Base experience yield per species
+        // We don't have it, so just slap a value on it
+        int b = randomBetween(40, 350);
+
+        // Level of fainted enemy
+        int L = loserLevel;
+
+        // Number of participants in team
+        int s = numMembers * 2;
+
+        return (int) Math.floor((a * b * L) / (7 * s));
+    }
+
     private static int getDamage(Member attacker, Member defender) {
+        int damage = 0;
+        double mod = getModifier(attacker);
+        // Normally, this is based on the type of attack is being done,
+        // Since we don't do it like this, set base damage to some multiple of 5
+        int base = 50;
+
+        damage = (int) Math.floor( (
+                    ((2 * attacker.getLevel() + 10) / 250.0) *
+                    (attacker.getAttack() / defender.getDefense()) *
+                    base + 2
+                ) * mod);
+
+        return damage;
+    }
+
+    private static double getModifier(Member attacker) {
+        // Same-type attack bonus
+        double stab = 1;
+
+        // Type effectiveness of the attack
+        double type = 1;
+
+        // Is it a critical hit? If so, crit is 1.5, otherwise 1
+        double critical = isCrit(attacker) ? 1.5 : 1;
+
+        // Random number between 0.85 and 1.00
+        double random = randomBetween(85, 100) / 100.0;
+
+        return stab * type * critical * random;
+    }
+
+    private static boolean isCrit(Member attacker) {
+        int value = randomBetween(0, 255);
+        int threshold = attacker.getSpeed() / 2;
+        return value < threshold;
+    }
+
+    private static int getDamage2(Member attacker, Member defender) {
         double mod = 1;
         int chanceToCrit = 10;
 
@@ -334,16 +550,9 @@ public class FightHelper {
         return f1Speed > f2Speed;
     }
 
-    private static List<Member> sortBySpeed(Team team) {
+    private static List<Member> shuffleMembers(Team team) {
         List<Member> list = new ArrayList<>(team.getMembers());
-
-        Collections.sort(list, new Comparator<Member>() {
-            @Override
-            public int compare(Member o1, Member o2) {
-                return o2.getSpeed() - o1.getSpeed();
-            }
-        });
-
+        Collections.shuffle(list);
         return list;
     }
 
