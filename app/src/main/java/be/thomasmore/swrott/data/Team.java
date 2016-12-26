@@ -8,6 +8,8 @@ import java.util.List;
  */
 public class Team {
 
+    public final static int MAX_LEVEL = 100;
+
     private long id;
 
     private String name;
@@ -97,6 +99,23 @@ public class Team {
             sum += m.getBase_defense();
             sum += m.getBase_hp();
             sum += m.getBase_speed();
+        }
+
+        return sum / (members.size() * 4);
+    }
+
+    public int getTeamExperience() {
+        if (members == null || members.size() == 0) {
+            return 0;
+        }
+
+        int sum = 0;
+
+        for (Member m : members) {
+            sum += m.getEv_attack();
+            sum += m.getEv_defense();
+            sum += m.getEv_hp();
+            sum += m.getEv_speed();
         }
 
         return sum / (members.size() * 4);

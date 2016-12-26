@@ -77,14 +77,27 @@
                 android:layout_alignParentRight="true"/>
         </RelativeLayout>
 
-        <!-- Add it when there's time -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stat_experience"
+            android:textSize="@dimen/textSize"
+            android:layout_marginLeft="@dimen/normal_margin"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="@dimen/normal_margin" />
+
         <ProgressBar
             android:id="@+id/experience"
             android:layout_width="match_parent"
-            android:layout_height="6dp"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_margin="10dp"
-            android:visibility="gone"/>
+            android:layout_height="10dp"
+            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_marginLeft="@dimen/normal_margin"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginRight="@dimen/normal_margin"
+            android:layout_marginEnd="@dimen/normal_margin"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="@dimen/normal_margin" />
 
 
         <Button

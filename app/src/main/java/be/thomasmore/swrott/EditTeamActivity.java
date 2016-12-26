@@ -17,19 +17,21 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.List;
 
 import be.thomasmore.swrott.data.DatabaseHelper;
+import be.thomasmore.swrott.data.FightHelper;
 import be.thomasmore.swrott.data.Member;
 import be.thomasmore.swrott.data.Planet;
+import be.thomasmore.swrott.data.Stats;
 import be.thomasmore.swrott.data.Team;
 
 public class EditTeamActivity extends AppCompatActivity {
 
     private Team _team;
-    private List<Member> _members;
     private DatabaseHelper _db;
 
     @Override
@@ -94,28 +96,39 @@ public class EditTeamActivity extends AppCompatActivity {
     }
 
     private void setup(long teamId) {
-        _team = _db.getTeam(teamId);
-        _members = _db.getMembers(_team.getId());
+        _team = _db.getTeamFull(teamId);
 
         final TextView teamName = (TextView) findViewById(R.id.teamname);
         final TextView homeworld = (TextView) findViewById(R.id.homeplanet);
         final ListView members = (ListView) findViewById(R.id.listViewMembers);
         final Button addMember = (Button) findViewById(R.id.add_member);
         final Planet planet = _db.getPlanet(_team.getPlanetId());
+        final ProgressBar expProgressBar = (ProgressBar) findViewById(R.id.experience);
+
+        final int oneTeamLevel = Member.MAX_EV / Team.MAX_LEVEL;
+        final int teamExp = _team.getTeamExperience();
+        final int teamLevel = Math.max(teamExp / oneTeamLevel, 1);
+        int progress = teamExp - (oneTeamLevel * teamLevel);
+
+        if (teamLevel == 1)
+            progress = teamExp;
+
+        expProgressBar.setMax(oneTeamLevel);
+        expProgressBar.setProgress(progress);
 
         homeworld.setText(planet.getName());
-        teamName.setText(_team.getName());
+        teamName.setText(String.format("%s - Lvl %d", _team.getName(), 1));
         members.setAdapter(new ArrayAdapter<Member>(
                 this,
                 android.R.layout.simple_list_item_1,
-                _members
+                _team.getMembers()
         ));
         members.setEmptyView(findViewById(R.id.empty));
         members.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parentView, View childView, int position, long id) {
                 Intent intent = new Intent(EditTeamActivity.this, EditMember.class);
-                intent.putExtra(Helper.MEMBERID_MESSAGE, _members.get(position).getId());
+                intent.putExtra(Helper.MEMBERID_MESSAGE, _team.getMembers().get(position).getId());
                 startActivityForResult(intent, 1);
             }
         });
@@ -127,7 +140,7 @@ public class EditTeamActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1);
             }
         });
-        if (_members.size() >= Helper.MAXMEMBERS) {
+        if (_team.getMembers().size() >= Helper.MAXMEMBERS) {
             addMember.setVisibility(View.GONE);
         }
     }

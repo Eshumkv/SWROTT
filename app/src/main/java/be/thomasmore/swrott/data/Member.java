@@ -5,7 +5,7 @@ package be.thomasmore.swrott.data;
  */
 public class Member {
 
-    private static final int MAX_EV = 65535;
+    public static final int MAX_EV = 65535;
 
     private long id;
 
