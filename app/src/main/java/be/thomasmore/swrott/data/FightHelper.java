@@ -164,8 +164,8 @@ public class FightHelper {
         int o_score = 0;
 
         // Shuffle the list and get the first fighter
-        List<Member> c_members = shuffleMembers(challenger);
-        List<Member> o_members = shuffleMembers(opponent);
+        List<Member> c_members = sortByLevel(challenger);
+        List<Member> o_members = sortByLevel(opponent);
 
         int c_index = 0;
         int o_index = 0;
@@ -489,60 +489,6 @@ public class FightHelper {
         return value < threshold;
     }
 
-    private static int getDamage2(Member attacker, Member defender) {
-        double mod = 1;
-        int chanceToCrit = 10;
-
-        // Attacker is higher level, so he has more chance to crit
-        // Crit chance: 30%
-        // Attacker is _LOWER_ level, so less chance
-        // Crit chance: 5%
-        if (attacker.getLevel() > defender.getLevel()) {
-            chanceToCrit = 30;
-        } else if (attacker.getLevel() < defender.getLevel()) {
-            chanceToCrit = 5;
-        }
-
-        // Is it a crit?
-        if (hasPercentChance(chanceToCrit))
-            mod += 0.5;
-
-        int attackRoll = randomBetween(0, attacker.getAttack());
-        int defenseRoll = randomBetween(0, defender.getDefense());
-
-        int baseDamage = attacker.getAttack() / 2;
-        int chanceToMiss = 25;
-
-        // Is it a glancing blow or a miss?
-        if (attackRoll < defenseRoll) {
-            if (hasPercentChance(chanceToMiss)) {
-                // miss
-                return 0;
-            } else {
-                // Glancing blow
-                baseDamage = attacker.getAttack() / 4;
-            }
-        } else if (attackRoll == defenseRoll) {
-            if (hasPercentChance(50))
-                baseDamage = attacker.getAttack() / 2;
-            else {
-                if (hasPercentChance(chanceToMiss)) {
-                    // miss
-                    return 0;
-                } else {
-                    // Glancing blow
-                    baseDamage = attacker.getAttack() / 4;
-                }
-            }
-        }
-
-        int damage = baseDamage +
-                Math.max(attacker.getAttack() - defender.getDefense(), 0);
-        damage *= mod;
-
-        return damage;
-    }
-
     private static boolean fighter1GoesFirst(Member fighter1, Member fighter2) {
         int f1Speed = randomBetween(0, fighter1.getSpeed());
         int f2Speed = randomBetween(0, fighter2.getSpeed());
@@ -556,6 +502,19 @@ public class FightHelper {
         return list;
     }
 
+    private static List<Member> sortByLevel(Team team) {
+        List<Member> result = new ArrayList<>(team.getMembers());
+
+        Collections.sort(result, new Comparator<Member>() {
+            @Override
+            public int compare(Member o1, Member o2) {
+                return o1.getLevel() - o2.getLevel();
+            }
+        });
+
+        return result;
+    }
+
     private static int randomLevelFromAvg(int avg) {
         int third = avg / 3;
         int result = randomBetween(avg - third, avg + third);
@@ -564,10 +523,6 @@ public class FightHelper {
             result = 1;
 
         return result;
-    }
-
-    private static boolean hasPercentChance(int percent) {
-        return randomBetween(0, 100) >= (100 - percent);
     }
 
     private static int randomBetween(int min, int max) {

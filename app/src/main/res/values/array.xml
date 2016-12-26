@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer-array name="fight_icons">
+        <item>@drawable/fighter1_icon</item>
+        <item>@drawable/fighter2_icon</item>
+    </integer-array>
+</resources>

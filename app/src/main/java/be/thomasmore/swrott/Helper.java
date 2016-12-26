@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AlertDialog;
@@ -159,6 +160,30 @@ public class Helper {
             return -1;
         }
         return result;
+    }
+
+    public static Bitmap getPicture(Context c, int resId, int w, int h) {
+        FileInputStream fis = null;
+
+        try {
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+
+            BitmapFactory.decodeResource(c.getResources(), resId, options);
+            options.inSampleSize = calculateInSampleSize(options, w, h);
+            options.inJustDecodeBounds = false;
+
+            return BitmapFactory.decodeResource(c.getResources(), resId, options);
+
+        } catch (Exception e) {
+            Log.e("EDIT", "Couldn't load image!", e);
+        } finally {
+            if (fis != null) {
+                try { fis.close(); } catch (Exception e) {}
+            }
+        }
+
+        return null;
     }
 
     public static Bitmap getPicture(Context c, String path, int w, int h) {

@@ -3,6 +3,7 @@ package be.thomasmore.swrott;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -11,11 +12,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewStub;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -26,6 +30,7 @@ import be.thomasmore.swrott.data.FightOutcome;
 import be.thomasmore.swrott.data.FightOutcomeDeath;
 import be.thomasmore.swrott.data.Member;
 import be.thomasmore.swrott.data.People;
+import be.thomasmore.swrott.data.Picture;
 import be.thomasmore.swrott.data.Team;
 
 public class Fight extends AppCompatActivity {
@@ -58,8 +63,13 @@ public class Fight extends AppCompatActivity {
             return;
         }
 
+        for (Member m : _team.getMembers()) {
+            m.setPicture(_db.getPicture(m.getPictureId()));
+        }
+
         // Create random team within parameters
         Team enemy = FightHelper.getEnemy(_team, _db.getAllPeople());
+
         enemy = _db.insertTeamFull(enemy);
 
         setupLayout(_team, enemy);
@@ -85,22 +95,22 @@ public class Fight extends AppCompatActivity {
 
         // A class to use in our threads, because we need to pass some data to it
         class ChangeColor implements Runnable {
-            private int _side;
-            private int _memberIndex;
+            private long _memberId;
             private boolean[] _results;
             private int _index;
 
-            public ChangeColor(int side, int memberIndex, boolean[] results, int index) {
-                _side = side;
-                _memberIndex = memberIndex;
+            public ChangeColor(long memberId, boolean[] results, int index) {
+                _memberId = memberId;
                 _results = results;
                 _index = index;
             }
 
             @Override
             public void run() {
-                final int resId = getResources().getIdentifier("f" + _side + "_member_" + _memberIndex, "id", getPackageName());
-                final ImageView img = (ImageView) findViewById(resId);
+                //final int resId = getResources().getIdentifier("f" + _side + "_member_" + _memberIndex, "id", getPackageName());
+                final View parent = findViewById(R.id.usedForSearch);
+                final View row = parent.findViewWithTag("id_" + _memberId);
+                final ImageView img = (ImageView) row.findViewById(R.id.member_image);
                 img.setBackgroundResource(R.color.colorFighterDead);
                 _results[_index] = true;
             }
@@ -129,7 +139,7 @@ public class Fight extends AppCompatActivity {
 
             new Handler()
                 .postDelayed(
-                    new ChangeColor(side, member, results, index),
+                    new ChangeColor(fod.getFighterId(), results, index),
                     time * i
             );
         }
@@ -157,6 +167,12 @@ public class Fight extends AppCompatActivity {
         }).start();
     }
 
+
+    @Override
+    public void onBackPressed() {
+        // It's sad but we have to disable it
+    }
+
     private void done(FightOutcome outcome) {
         Intent intent = new Intent(this, FightResult.class);
         intent.putExtra(Helper.OUTCOME_MESSAGE, outcome);
@@ -172,16 +188,82 @@ public class Fight extends AppCompatActivity {
         f1NameText.setText(f1.getName());
         f2NameText.setText(f2.getName());
 
-        for (int i = 1; i <= f1.getMembers().size(); i++) {
-            final int resId = getResources().getIdentifier("f1_member_" + i, "id", getPackageName());
-            final ImageView img = (ImageView) findViewById(resId);
-            img.setVisibility(View.VISIBLE);
-        }
+        TypedArray array = getResources().obtainTypedArray(R.array.fight_icons);
+        List<Integer> icons = new ArrayList<>();
 
-        for (int i = 1; i <= f2.getMembers().size(); i++) {
-            final int resId = getResources().getIdentifier("f2_member_" + i, "id", getPackageName());
-            final ImageView img = (ImageView) findViewById(resId);
-            img.setVisibility(View.VISIBLE);
+        for (int i = 0; i < array.length(); i++) {
+            int resId = array.getResourceId(i, 0);
+            if (resId != 0)
+                icons.add(resId);
         }
+        array.recycle();
+
+        GridView f1Grid = (GridView) findViewById(R.id.fighter1_members);
+        f1Grid.setAdapter(new FightAdapter(
+                this, f1.getMembers(), R.color.colorFighter1, false, icons));
+
+        GridView f2Grid = (GridView) findViewById(R.id.fighter2_members);
+        f2Grid.setAdapter(new FightAdapter(
+                this, f2.getMembers(), R.color.colorFighter2, true, icons));
+
+//        setupTeamView(R.id.fighter1, f1, true);
+//        setupTeamView(R.id.fighter2, f2, false);
+
+
+        // Old code
+//        for (int i = 1; i <= f1.getMembers().size(); i++) {
+//            final int resId = getResources().getIdentifier("f1_member_" + i, "id", getPackageName());
+//            final ImageView img = (ImageView) findViewById(resId);
+//            img.setVisibility(View.VISIBLE);
+//        }
+//
+//        for (int i = 1; i <= f2.getMembers().size(); i++) {
+//            final int resId = getResources().getIdentifier("f2_member_" + i, "id", getPackageName());
+//            final ImageView img = (ImageView) findViewById(resId);
+//            img.setVisibility(View.VISIBLE);
+//        }
     }
+
+//    private void setupTeamView2(int resId, Team team, boolean isUser) {
+//        final int icon = Helper.randomBetween(0, 1) == 1 ? R.drawable.fighter1_icon : R.drawable.fighter2_icon;
+//        final LinearLayout teamLLayout = (LinearLayout) findViewById(resId);
+//
+//        LayoutInflater inflater = getLayoutInflater();
+//        //View container = inflater.inflate(R.layout.fight_team_container, null);
+//        ViewStub stub = (ViewStub) findViewById(isUser ? R.id.layout_stub : R.id.layout_stub2);
+//        stub.setLayoutResource(R.layout.fight_team_container);
+//        View container = stub.inflate();
+//
+//        final LinearLayout topView = (LinearLayout) container.findViewById(R.id.top);
+//        final LinearLayout bottomView = (LinearLayout) container.findViewById(R.id.bottom);
+//
+//        for (int i = 0; i < team.getMembers().size(); i++) {
+//            View teamMemberView = inflater.inflate(R.layout.fight_team_member, null);
+//            final ImageView picture = (ImageView) teamMemberView.findViewById(R.id.member_image);
+//            final TextView memberName = (TextView) teamMemberView.findViewById(R.id.member_name);
+//            final TextView memberLvl = (TextView) teamMemberView.findViewById(R.id.member_lvl);
+//            final Member member = team.getMembers().get(i);
+//
+//            picture.setTag("id_" + member.getId());
+//
+//            if (isUser) {
+//                picture.setImageBitmap(Helper.getPicture(this, _db.getPicture(member.getPictureId()).getPath(), 85, 85));
+//            } else {
+//                picture.setImageResource(icon);
+//            }
+//
+//            memberName.setText(member.getPerson().getName());
+//            memberLvl.setText(String.format("Lvl %d", member.getLevel()));
+//            picture.setBackgroundResource(isUser ? R.color.colorFighter1 : R.color.colorFighter2);
+//
+//            // Do we need to add it to the top or bottom view?
+//            if ( (i + 1) >= (Helper.MAXMEMBERS / 2)) {
+//                bottomView.addView(teamMemberView);
+//            } else {
+//                topView.addView(teamMemberView);
+//            }
+//        }
+//
+//        //teamLLayout.addView(container);
+//    }
 }
