@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:showIn="@layout/activity_wiki">
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HUMAN"
+            android:textSize="@dimen/textSize"
+            android:layout_marginLeft="@dimen/normal_margin"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="@dimen/normal_margin"
+            android:id="@+id/name" />
+
+        <!--Horizontal rule-->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="@color/colorHRule"
+            android:layout_marginBottom="@dimen/small_margin" />
+    </LinearLayout>
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="1">
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wiki_species_classification"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+
+            <TextView
+                android:id="@+id/classification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wiki_species_designation"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+
+            <TextView
+                android:id="@+id/designation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wiki_species_average_height"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+
+            <TextView
+                android:id="@+id/height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wiki_species_average_lifespan"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+
+            <TextView
+                android:id="@+id/lifespan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wiki_species_homeworld"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+
+            <TextView
+                android:id="@+id/homeworld"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wiki_species_language"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+
+            <TextView
+                android:id="@+id/language"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+        </TableRow>
+    </TableLayout>
+
+    <!-- SKIN COLOR -->
+    <LinearLayout
+        android:id="@+id/skinHeader"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wiki_species_skin_colors"
+            android:textSize="@dimen/textSize"
+            android:layout_marginLeft="@dimen/normal_margin"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginBottom="2dp" />
+
+        <!--Horizontal rule-->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="@color/colorHRule"
+            android:layout_marginBottom="@dimen/small_margin" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/skinList"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/normal_margin"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginRight="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin">
+    </LinearLayout>
+
+    <!-- HAIR COLOR -->
+    <LinearLayout
+        android:id="@+id/hairHeader"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wiki_species_hair_colors"
+            android:textSize="@dimen/textSize"
+            android:layout_marginLeft="@dimen/normal_margin"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginBottom="2dp" />
+
+        <!--Horizontal rule-->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="@color/colorHRule"
+            android:layout_marginBottom="@dimen/small_margin" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/hairList"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/normal_margin"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginRight="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin">
+    </LinearLayout>
+
+    <!-- EYE COLOR -->
+    <LinearLayout
+        android:id="@+id/eyeHeader"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wiki_species_eye_colors"
+            android:textSize="@dimen/textSize"
+            android:layout_marginLeft="@dimen/normal_margin"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginBottom="2dp" />
+
+        <!--Horizontal rule-->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="@color/colorHRule"
+            android:layout_marginBottom="@dimen/small_margin" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/eyeList"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/normal_margin"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginRight="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin">
+    </LinearLayout>
+
+    <!-- PEOPLE -->
+    <LinearLayout
+        android:id="@+id/peopleHeader"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wiki_species_people"
+            android:textSize="@dimen/textSize"
+            android:layout_marginLeft="@dimen/normal_margin"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginBottom="2dp" />
+
+        <!--Horizontal rule-->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="@color/colorHRule"
+            android:layout_marginBottom="@dimen/small_margin" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/peopleList"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/normal_margin"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginRight="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin">
+    </LinearLayout>
+
+</LinearLayout>

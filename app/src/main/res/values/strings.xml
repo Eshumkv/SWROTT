@@ -5,6 +5,9 @@
     <string name="action_delete">Delete</string>
     <string name="action_about">About</string>
     <string name="action_add_member">Add Member</string>
+    <string name="action_wiki">Wiki</string>
+    <string name="action_refresh_wiki">Refresh</string>
+    <string name="action_wiki_home">Home</string>
 
     <string name="dialog_spinner">Loading, may appear stuck...</string>
     <string name="dialog_no_internet">Do you want to load old data? If not, the app will quit. Try again when you have an active internet connection.</string>
@@ -16,12 +19,14 @@
     <string name="dialog_maketeam_title">Make a new team</string>
     <string name="dialog_deleteteam_title">DELETE TEAM</string>
     <string name="dialog_confirm_team_deletion">Are you sure you wish to delete this team? This action can NOT be undone!</string>
+    <string name="dialog_deletemember_title">DELETE MEMBER</string>
+    <string name="dialog_confirm_member_deletion">Are you sure you wish to delete this team? This action can NOT be undone!</string>
+
     <string name="dialog_error_title">Error</string>
+    <string name="dialog_error_no_internet">There is no internet.</string>
     <string name="dialog_error_should_not_happen">Something really went wrong.</string>
     <string name="dialog_error_no_members_in_team">There are no members in your team!</string>
     <string name="dialog_error_char_already_in_team">This character is already in this team.</string>
-    <string name="dialog_deletemember_title">DELETE MEMBER</string>
-    <string name="dialog_confirm_member_deletion">Are you sure you wish to delete this team? This action can NOT be undone!</string>
 
 
     <string name="list_team_header">Your teams</string>
@@ -62,5 +67,47 @@
     <string name="fight_result_result">Result</string>
     <string name="fight_result_winner">Winner</string>
     <string name="fight_result_view_log">View log</string>
+    <string name="title_activity_wiki">Wiki</string>
+
+    <string name="wiki_main_people">List People</string>
+    <string name="wiki_main_planets">List planets</string>
+    <string name="wiki_main_species">List Species</string>
+
+    <string name="wiki_list_people">People</string>
+    <string name="wiki_list_planets">planets</string>
+    <string name="wiki_list_species">Species</string>
+
+    <string name="wiki_people_height">Height</string>
+    <string name="wiki_people_mass">Mass</string>
+    <string name="wiki_people_hair_color">Hair Color</string>
+    <string name="wiki_people_skin_color">Skin Color</string>
+    <string name="wiki_people_eye_color">Eye Color</string>
+    <string name="wiki_people_birth_year">Birth Year</string>
+    <string name="wiki_people_gender">Gender</string>
+    <string name="wiki_people_homeworld">Homeworld</string>
+    <string name="wiki_people_species">Species</string>
+
+    <string name="wiki_planet_name">Name</string>
+    <string name="wiki_planet_rotation_period">Rotation Period</string>
+    <string name="wiki_planet_orbital_period">Orbital Period</string>
+    <string name="wiki_planet_diameter">Diameter</string>
+    <string name="wiki_planet_climate">Climate</string>
+    <string name="wiki_planet_gravity">Gravity</string>
+    <string name="wiki_planet_terrain">Terrain</string>
+    <string name="wiki_planet_surface_water">Surface Water</string>
+    <string name="wiki_planet_population">Population</string>
+    <string name="wiki_planet_residents">Residents</string>
+
+    <string name="wiki_species_name">Name</string>
+    <string name="wiki_species_classification">Classification</string>
+    <string name="wiki_species_designation">Designation</string>
+    <string name="wiki_species_average_height">Average Height</string>
+    <string name="wiki_species_skin_colors">Skin Colors</string>
+    <string name="wiki_species_hair_colors">Hair Colors</string>
+    <string name="wiki_species_eye_colors">Eye Colors</string>
+    <string name="wiki_species_average_lifespan">Average Lifespan</string>
+    <string name="wiki_species_homeworld">Homeworld</string>
+    <string name="wiki_species_language">Language</string>
+    <string name="wiki_species_people">People</string>
 
 </resources>

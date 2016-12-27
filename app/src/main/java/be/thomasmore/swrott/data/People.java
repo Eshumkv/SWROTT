@@ -1,6 +1,10 @@
 package be.thomasmore.swrott.data;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,9 +24,12 @@ public class People implements Serializable {
     private String skinColor;
     private String url;
     private String edited;
+    private String species;
 
     private long homeworldId;
     private Planet homeworld;
+
+    List<Long> speciesIds;
 
     public long getId() {
         return id;
@@ -126,6 +133,35 @@ public class People implements Serializable {
 
     public void setHomeworld(Planet homeworld) {
         this.homeworld = homeworld;
+    }
+
+    public String getSpecies() {
+        return species;
+    }
+
+    public void setSpecies(String species) {
+        this.species = species;
+    }
+
+    public List<Long> getSpeciesIds() {
+        if (speciesIds == null) {
+            speciesIds = new ArrayList<>();
+
+            try {
+                JSONArray speciesJSON = new JSONArray(species);
+
+                for (int i = 0; i < speciesJSON.length(); i++) {
+                    String r = speciesJSON.getString(i);
+
+                    try {
+                        String[] urlparts = r.split("/");
+                        speciesIds.add(Long.parseLong(urlparts[urlparts.length - 1]));
+                    } catch (Exception e) {}
+                }
+            } catch (JSONException e) {}
+        }
+
+        return speciesIds;
     }
 
     @Override

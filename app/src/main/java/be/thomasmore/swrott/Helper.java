@@ -9,6 +9,8 @@ import android.content.res.AssetManager;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.SystemClock;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -39,6 +41,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import be.thomasmore.swrott.data.DatabaseHelper;
+import be.thomasmore.swrott.data.HttpReader;
+import be.thomasmore.swrott.data.JSONHelper;
+import be.thomasmore.swrott.data.People;
+import be.thomasmore.swrott.data.Planet;
+import be.thomasmore.swrott.data.RootsReader;
+import be.thomasmore.swrott.data.Species;
 import be.thomasmore.swrott.data.Stats;
 
 /**
@@ -52,6 +61,8 @@ public class Helper {
     public final static String TEAMID_MESSAGE = "be.thomasmore.swrott.TEAMID_MESSAGE";
     public final static String MEMBERID_MESSAGE = "be.thomasmore.swrott.MEMBERID_MESSAGE";
     public final static String OUTCOME_MESSAGE = "be.thomasmore.swrott.OUTCOME_MESSAGE";
+    public final static String WIKI_MESSAGE = "be.thomasmore.swrott.WIKI_MESSAGE";
+    public final static String WIKI_TYPE_MESSAGE = "be.thomasmore.swrott.WIKI_TYPE_MESSAGE";
 
     public final static Random _rand = new Random();
 

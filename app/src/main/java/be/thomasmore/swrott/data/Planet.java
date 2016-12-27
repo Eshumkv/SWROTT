@@ -1,6 +1,11 @@
 package be.thomasmore.swrott.data;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by koenv on 11-12-2016.
@@ -21,6 +26,8 @@ public class Planet implements Serializable {
     private String residents;
     private String url;
     private String edited;
+
+    private List<Long> residentIds;
 
     public long getId() {
         return id;
@@ -124,6 +131,27 @@ public class Planet implements Serializable {
 
     public void setEdited(String edited) {
         this.edited = edited;
+    }
+
+    public List<Long> getResidentIds() {
+        if (residentIds == null) {
+            residentIds = new ArrayList<>();
+
+            try {
+                JSONArray residentsJson = new JSONArray(residents);
+
+                for (int i = 0; i < residentsJson.length(); i++) {
+                    String r = residentsJson.getString(i);
+
+                    try {
+                        String[] urlparts = r.split("/");
+                        residentIds.add(Long.parseLong(urlparts[urlparts.length - 1]));
+                    } catch (Exception e) {}
+                }
+            } catch (JSONException e) {}
+        }
+
+        return residentIds;
     }
 
     @Override

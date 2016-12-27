@@ -88,6 +88,7 @@ public class JSONHelper {
             s.setLanguage(speciesObj.getString("language"));
             s.setUrl(speciesObj.getString("url"));
             s.setEdited(speciesObj.getString("edited"));
+            s.setPeople(speciesObj.getString("people"));
 
             String[] urlparts = new String[] {};
 
@@ -170,6 +171,7 @@ public class JSONHelper {
             p.setSkinColor(peopleObj.getString("skin_color"));
             p.setUrl(peopleObj.getString("url"));
             p.setEdited(peopleObj.getString("edited"));
+            p.setSpecies(peopleObj.getString("species"));
 
             String[] urlparts = new String[] {};
 

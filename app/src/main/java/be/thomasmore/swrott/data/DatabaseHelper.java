@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * The database version. Can only be incremented.
      * When incremented, the database will be recreated.
      */
-    private static final int DATABASE_VERSION = 20;
+    private static final int DATABASE_VERSION = 22;
 
     /**
      * The name of the database.
@@ -111,6 +111,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "language TEXT," +
                 "url TEXT," +
                 "edited TEXT," +
+                "people TEXT," +
                 "homeworldId INTEGER," +
                 "personSpeciesId INTEGER," +
                 "FOREIGN KEY (homeworldId) REFERENCES " + PLANET + "(id)" +
@@ -128,6 +129,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "skinColor TEXT," +
                 "url TEXT," +
                 "edited TEXT," +
+                "species TEXT," +
                 "homeworldId INTEGER," +
                 "personSpeciesId INTEGER," +
                 "FOREIGN KEY (homeworldId) REFERENCES " + PLANET + "(id)" +
@@ -346,6 +348,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("url", person.getUrl());
         values.put("edited", person.getEdited());
         values.put("homeworldId", person.getHomeworldId());
+        values.put("species", person.getSpecies());
 
         return values;
     }
@@ -386,6 +389,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("url", species.getUrl());
         values.put("edited", species.getEdited());
         values.put("homeworldId", species.getHomeworldId());
+        values.put("people", species.getPeople());
 
         return values;
     }
@@ -1213,7 +1217,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "language",
                         "url",
                         "edited",
-                        "homeworldId"
+                        "homeworldId",
+                        "people"
                 },
                 "id = ?",                               // Where
                 new String[] { String.valueOf(id) },    // Where-params
@@ -1241,6 +1246,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             obj.setUrl(cursor.getString(10));
             obj.setEdited(cursor.getString(11));
             obj.setHomeworldId(cursor.getLong(12));
+            obj.setPeople(cursor.getString(13));
         }
 
         cursor.close();
@@ -1271,7 +1277,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "language",
                         "url",
                         "edited",
-                        "homeworldId"
+                        "homeworldId",
+                        "people"
                 },
                 null,                               // Where
                 null,    // Where-params
@@ -1301,6 +1308,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 obj.setUrl(cursor.getString(10));
                 obj.setEdited(cursor.getString(11));
                 obj.setHomeworldId(cursor.getLong(12));
+                obj.setPeople(cursor.getString(13));
 
                 species.add(obj);
             } while (cursor.moveToNext());
@@ -1407,7 +1415,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "skinColor",
                         "url",
                         "edited",
-                        "homeworldId"
+                        "homeworldId",
+                        "species"
                 },
                 "id = ?",                               // Where
                 new String[] { String.valueOf(id) },    // Where-params
@@ -1434,6 +1443,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             obj.setUrl(cursor.getString(9));
             obj.setEdited(cursor.getString(10));
             obj.setHomeworldId(cursor.getLong(11));
+            obj.setSpecies(cursor.getString(12));
         }
 
         cursor.close();
@@ -1463,7 +1473,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "skinColor",
                         "url",
                         "edited",
-                        "homeworldId"
+                        "homeworldId",
+                        "species"
                 },
                 null,                               // Where
                 null,    // Where-params
@@ -1492,6 +1503,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 obj.setUrl(cursor.getString(9));
                 obj.setEdited(cursor.getString(10));
                 obj.setHomeworldId(cursor.getLong(11));
+                obj.setSpecies(cursor.getString(12));
 
                 people.add(obj);
             } while (cursor.moveToNext());

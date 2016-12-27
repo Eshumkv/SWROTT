@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:showIn="@layout/activity_wiki">
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ALDERAAN"
+            android:textSize="@dimen/textSize"
+            android:layout_marginLeft="@dimen/normal_margin"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="@dimen/normal_margin"
+            android:id="@+id/name" />
+
+        <!--Horizontal rule-->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="@color/colorHRule"
+            android:layout_marginBottom="@dimen/small_margin" />
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="1">
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wiki_planet_rotation_period"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+
+            <TextView
+                android:id="@+id/rotation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wiki_planet_orbital_period"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+
+            <TextView
+                android:id="@+id/orbital"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wiki_planet_diameter"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+
+            <TextView
+                android:id="@+id/diameter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wiki_planet_climate"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+
+            <TextView
+                android:id="@+id/climate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wiki_planet_gravity"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+
+            <TextView
+                android:id="@+id/gravity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wiki_planet_terrain"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+
+            <TextView
+                android:id="@+id/terrain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wiki_planet_surface_water"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+
+            <TextView
+                android:id="@+id/water"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wiki_planet_population"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+
+            <TextView
+                android:id="@+id/population"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/normal_margin" />
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
+        android:id="@+id/residentsHeader"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wiki_planet_residents"
+            android:textSize="@dimen/textSize"
+            android:layout_marginLeft="@dimen/normal_margin"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginBottom="2dp" />
+
+        <!--Horizontal rule-->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="@color/colorHRule"
+            android:layout_marginBottom="@dimen/small_margin" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/residentsList"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/normal_margin"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginRight="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin">
+    </LinearLayout>
+
+</LinearLayout>

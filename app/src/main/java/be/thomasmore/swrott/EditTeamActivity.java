@@ -122,6 +122,18 @@ public class EditTeamActivity extends AppCompatActivity {
         expProgressBar.setProgress(progress);
 
         homeworld.setText(planet.getName());
+        homeworld.setLongClickable(true);
+        homeworld.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent(EditTeamActivity.this, Wiki.class);
+                intent.putExtra(Helper.WIKI_TYPE_MESSAGE, WikiType.Planet);
+                intent.putExtra(Helper.WIKI_MESSAGE, planet.getId());
+                startActivity(intent);
+                return true;
+            }
+        });
+
         teamName.setText(String.format("%s - Lvl %d", _team.getName(), 1));
         members.setAdapter(new ArrayAdapter<Member>(
                 this,

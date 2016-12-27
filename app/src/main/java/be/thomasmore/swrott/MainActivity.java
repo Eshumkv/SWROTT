@@ -188,6 +188,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_about:
                 startActivity(new Intent(this, About.class));
                 return true;
+            case R.id.action_wiki:
+                startActivity(new Intent(this, Wiki.class));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

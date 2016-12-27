@@ -11,4 +11,5 @@
     <color name="colorResultWin">#1A9195</color>
     <color name="colorResultLose">#DD1111</color>
     <color name="colorWhite">#eeeeee</color>
+    <color name="colorTransparent">#80000000</color>
 </resources>

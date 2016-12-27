@@ -10,13 +10,19 @@
         app:showAsAction="ifRoom"
         android:title="@string/action_fight" />
     <item
-        android:id="@+id/action_about"
+        android:id="@+id/action_wiki"
         android:orderInCategory="2"
+        android:icon="@drawable/wiki_icon"
+        app:showAsAction="ifRoom"
+        android:title="@string/action_wiki" />
+    <item
+        android:id="@+id/action_about"
+        android:orderInCategory="3"
         app:showAsAction="never"
         android:title="@string/action_about" />
     <item
         android:id="@+id/action_refresh"
-        android:orderInCategory="3"
+        android:orderInCategory="4"
         app:showAsAction="never"
         android:title="@string/action_refresh" />
 

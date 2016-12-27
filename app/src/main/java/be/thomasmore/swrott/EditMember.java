@@ -117,6 +117,7 @@ public class EditMember extends AppCompatActivity {
 
         // We don't need the add action here
         menu.findItem(R.id.action_add).setVisible(false);
+        menu.findItem(R.id.action_wiki).setVisible(true);
 
         return true;
     }
@@ -126,6 +127,9 @@ public class EditMember extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 done();
+                return true;
+            case R.id.action_wiki:
+                showWiki();
                 return true;
             case R.id.action_delete:
                 showDeleteDialog();
@@ -155,6 +159,13 @@ public class EditMember extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         done();
+    }
+
+    private void showWiki() {
+        Intent intent = new Intent(this, Wiki.class);
+        intent.putExtra(Helper.WIKI_TYPE_MESSAGE, WikiType.People);
+        intent.putExtra(Helper.WIKI_MESSAGE, _member.getPeopleId());
+        startActivity(intent);
     }
 
     private void showDeleteDialog() {
