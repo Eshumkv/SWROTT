@@ -4,7 +4,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -33,6 +35,7 @@ import be.thomasmore.swrott.data.HttpReader;
 import be.thomasmore.swrott.data.JSONHelper;
 import be.thomasmore.swrott.data.People;
 import be.thomasmore.swrott.data.Planet;
+import be.thomasmore.swrott.data.RootsReader;
 import be.thomasmore.swrott.data.Species;
 
 public class Wiki extends AppCompatActivity {
@@ -105,7 +108,7 @@ public class Wiki extends AppCompatActivity {
             refreshVisible = false;
             homeVisible = false;
         } else if (_type == WikiType.ListPlanets || _type == WikiType.ListSpecies || _type == WikiType.ListPeople) {
-            refreshVisible = false;
+            refreshVisible = true;
             homeVisible = true;
         } else {
             refreshVisible = true;
@@ -225,12 +228,10 @@ public class Wiki extends AppCompatActivity {
         // Set the planet
         final Planet p = _db.getPlanet(person.getHomeworldId());
         homeworld.setText(p.getName());
-        homeworld.setLongClickable(true);
-        homeworld.setOnLongClickListener(new View.OnLongClickListener() {
+        homeworld.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 gotoWiki(WikiType.Planet, p.getId());
-                return true;
             }
         });
 
@@ -250,13 +251,11 @@ public class Wiki extends AppCompatActivity {
                 t.setText(s.getName());
 
                 listitem.setTag(s.getId());
-                listitem.setLongClickable(true);
-                listitem.setOnLongClickListener(new View.OnLongClickListener() {
+                listitem.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public boolean onLongClick(View v) {
+                    public void onClick(View v) {
                         long t_id = (long) v.getTag();
                         gotoWiki(WikiType.Species, t_id);
-                        return true;
                     }
                 });
                 species.addView(listitem);
@@ -317,13 +316,11 @@ public class Wiki extends AppCompatActivity {
                 t.setText(p.getName());
 
                 listitem.setTag(p.getId());
-                listitem.setLongClickable(true);
-                listitem.setOnLongClickListener(new View.OnLongClickListener() {
+                listitem.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public boolean onLongClick(View v) {
+                    public void onClick(View v) {
                         long t_id = (long) v.getTag();
                         gotoWiki(WikiType.People, t_id);
-                        return true;
                     }
                 });
                 residents.addView(listitem);
@@ -371,12 +368,10 @@ public class Wiki extends AppCompatActivity {
 
         final Planet p = _db.getPlanet(species.getHomeworldId());
         homeworld.setText(p.getName());
-        homeworld.setLongClickable(true);
-        homeworld.setOnLongClickListener(new View.OnLongClickListener() {
+        homeworld.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 gotoWiki(WikiType.Planet, p.getId());
-                return true;
             }
         });
 
@@ -396,13 +391,11 @@ public class Wiki extends AppCompatActivity {
                 t.setText(pp.getName());
 
                 listitem.setTag(pp.getId());
-                listitem.setLongClickable(true);
-                listitem.setOnLongClickListener(new View.OnLongClickListener() {
+                listitem.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public boolean onLongClick(View v) {
+                    public void onClick(View v) {
                         long t_id = (long) v.getTag();
                         gotoWiki(WikiType.People, t_id);
-                        return true;
                     }
                 });
                 people.addView(listitem);
@@ -592,6 +585,86 @@ public class Wiki extends AppCompatActivity {
                         }
                     }
                 }).execute(species.getUrl());
+                break;
+            case ListSpecies:
+            case ListPeople:
+            case ListPlanets:
+                // Create a loading spinner
+                FragmentManager fm = getSupportFragmentManager();
+                final MySpinnerDialog spinner = new MySpinnerDialog();
+                spinner.show(fm, "some_tag");
+
+                // Create a list to hold results
+                // Hacky way of getting data from a thread
+                final int listSize = 1;
+                final List<Boolean> results = new ArrayList<>(listSize);
+
+                // Make the thread to check whether we've loaded
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        while (results.size() < listSize) {
+                            SystemClock.sleep(500); // NEVER on UI-THREAD!!!!
+                        }
+
+                        // We're done loading
+                        spinner.dismiss();
+                    }
+                }).start();
+
+                if (_type == WikiType.ListPlanets) {
+                    final String planetUrl = "http://swapi.co/api/planets/";
+                    new HttpReader(new HttpReader.OnResultReadyListener() {
+                        @Override
+                        public void resultReady(String result) {
+                            new RootsReader<>(JSONHelper.JSONTypes.Planet, new RootsReader.OnResultReadyListener() {
+                                @Override
+                                public void resultReady(List result) {
+                                    List<Planet> planets = (List<Planet>) result;
+                                    _db.deleteAllPlanets();
+                                    _db.insertPlanets(planets);
+                                    results.add(true);
+                                }
+                            }).execute(planetUrl);
+                        }
+                    }).execute(planetUrl);
+                }
+
+                if (_type == WikiType.ListPeople) {
+                    final String peopleUrl = "http://swapi.co/api/people/";
+                    new HttpReader(new HttpReader.OnResultReadyListener() {
+                        @Override
+                        public void resultReady(String result) {
+                            new RootsReader<>(JSONHelper.JSONTypes.People, new RootsReader.OnResultReadyListener() {
+                                @Override
+                                public void resultReady(List result) {
+                                    List<People> people = (List<People>) result;
+                                    _db.deleteAllPeople();
+                                    _db.insertPeoples(people);
+                                    results.add(true);
+                                }
+                            }).execute(peopleUrl);
+                        }
+                    }).execute(peopleUrl);
+                }
+
+                if (_type == WikiType.ListPeople) {
+                    final String speciesUrl = "http://swapi.co/api/species/";
+                    new HttpReader(new HttpReader.OnResultReadyListener() {
+                        @Override
+                        public void resultReady(String result) {
+                            new RootsReader<>(JSONHelper.JSONTypes.Species, new RootsReader.OnResultReadyListener() {
+                                @Override
+                                public void resultReady(List result) {
+                                    List<Species> species = (List<Species>) result;
+                                    _db.deleteAllSpecies();
+                                    _db.insertSpecies(species);
+                                    results.add(true);
+                                }
+                            }).execute(speciesUrl);
+                        }
+                    }).execute(speciesUrl);
+                }
                 break;
             default:
                 // Shouldn't get here

@@ -5,8 +5,10 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -31,8 +33,10 @@ import java.util.Random;
 import be.thomasmore.swrott.data.DatabaseHelper;
 import be.thomasmore.swrott.data.HttpReader;
 import be.thomasmore.swrott.data.JSONHelper;
+import be.thomasmore.swrott.data.People;
 import be.thomasmore.swrott.data.Planet;
 import be.thomasmore.swrott.data.RootsReader;
+import be.thomasmore.swrott.data.Species;
 import be.thomasmore.swrott.data.Team;
 
 public class MainActivity extends AppCompatActivity {
@@ -174,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
         menu.findItem(R.id.action_fight).setVisible(teams.size() != 0);
 
         // Can't refresh for now
-        menu.findItem(R.id.action_refresh).setVisible(false);
+        //menu.findItem(R.id.action_refresh).setVisible(false);
 
         return true;
     }
@@ -188,11 +192,87 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_about:
                 startActivity(new Intent(this, About.class));
                 return true;
+            case R.id.action_refresh:
+                refresh();
+                return true;
             case R.id.action_wiki:
                 startActivity(new Intent(this, Wiki.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void refresh() {
+        // Create a loading spinner
+        FragmentManager fm = getSupportFragmentManager();
+        final MySpinnerDialog spinner = new MySpinnerDialog();
+        spinner.show(fm, "some_tag");
+
+        // Create a list to hold results
+        // Hacky way of getting data from a thread
+        final int listSize = 3;     // 3 threads (which might call another thread)
+        final List<Boolean> results = new ArrayList<>(listSize);
+
+        // Make the thread to check whether we've loaded
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (results.size() < listSize) {
+                    SystemClock.sleep(500); // NEVER on UI-THREAD!!!!
+                }
+
+                // We're done loading
+                spinner.dismiss();
+            }
+        }).start();
+
+        final String planetUrl = "http://swapi.co/api/planets/";
+        new HttpReader(new HttpReader.OnResultReadyListener() {
+            @Override
+            public void resultReady(String result) {
+                new RootsReader<>(JSONHelper.JSONTypes.Planet, new RootsReader.OnResultReadyListener() {
+                    @Override
+                    public void resultReady(List result) {
+                        List<Planet> planets = (List<Planet>)result;
+                        db.deleteAllPlanets();
+                        db.insertPlanets(planets);
+                        results.add(true);
+                    }
+                }).execute(planetUrl);
+            }
+        }).execute(planetUrl);
+
+        final String peopleUrl = "http://swapi.co/api/people/";
+        new HttpReader(new HttpReader.OnResultReadyListener() {
+            @Override
+            public void resultReady(String result) {
+                new RootsReader<>(JSONHelper.JSONTypes.People, new RootsReader.OnResultReadyListener() {
+                    @Override
+                    public void resultReady(List result) {
+                        List<People> people = (List<People>)result;
+                        db.deleteAllPeople();
+                        db.insertPeoples(people);
+                        results.add(true);
+                    }
+                }).execute(peopleUrl);
+            }
+        }).execute(peopleUrl);
+
+        final String speciesUrl = "http://swapi.co/api/species/";
+        new HttpReader(new HttpReader.OnResultReadyListener() {
+            @Override
+            public void resultReady(String result) {
+                new RootsReader<>(JSONHelper.JSONTypes.Species, new RootsReader.OnResultReadyListener() {
+                    @Override
+                    public void resultReady(List result) {
+                        List<Species> species = (List<Species>)result;
+                        db.deleteAllSpecies();
+                        db.insertSpecies(species);
+                        results.add(true);
+                    }
+                }).execute(speciesUrl);
+            }
+        }).execute(speciesUrl);
     }
 }
