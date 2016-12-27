@@ -96,12 +96,6 @@
                     android:layout_marginBottom="2dp"
                     android:layout_marginTop="@dimen/normal_margin" />
 
-                <include
-                    layout="@layout/part_stats"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/linearlayout1" />
-
                 <ImageView
                     android:id="@+id/picture"
                     android:layout_width="wrap_content"
@@ -109,6 +103,11 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/normal_margin"
                     android:layout_marginBottom="@dimen/normal_margin" />
+
+                <include
+                    layout="@layout/part_stats"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>

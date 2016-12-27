@@ -287,31 +287,31 @@ public class Member {
     public Stats getStats() {
         if (stats == null) {
             stats = new Stats();
-
-            stats.setBase_attack(base_attack);
-            stats.setBase_defense(base_defense);
-            stats.setBase_speed(base_speed);
-            stats.setBase_hp(base_hp);
-
-            stats.setIv_attack(iv_attack);
-            stats.setIv_defense(iv_defense);
-            stats.setIv_speed(iv_speed);
-            stats.setIv_hp(iv_hp);
-
-            stats.setEv_attack(ev_attack);
-            stats.setEv_defense(ev_defense);
-            stats.setEv_speed(ev_speed);
-            stats.setEv_hp(ev_hp);
-
-            stats.setSpeed(speed);
-            stats.setAttack(attack);
-            stats.setDefense(defense);
-            stats.setHealthPoints(healthPoints);
-
-            stats.setExperience(experience);
-            stats.setExpToLevel(expToLevel);
-            stats.setLevel(level);
         }
+
+        stats.setBase_attack(base_attack);
+        stats.setBase_defense(base_defense);
+        stats.setBase_speed(base_speed);
+        stats.setBase_hp(base_hp);
+
+        stats.setIv_attack(iv_attack);
+        stats.setIv_defense(iv_defense);
+        stats.setIv_speed(iv_speed);
+        stats.setIv_hp(iv_hp);
+
+        stats.setEv_attack(ev_attack);
+        stats.setEv_defense(ev_defense);
+        stats.setEv_speed(ev_speed);
+        stats.setEv_hp(ev_hp);
+
+        stats.setSpeed(speed);
+        stats.setAttack(attack);
+        stats.setDefense(defense);
+        stats.setHealthPoints(healthPoints);
+
+        stats.setExperience(experience);
+        stats.setExpToLevel(expToLevel);
+        stats.setLevel(level);
 
         return stats;
     }

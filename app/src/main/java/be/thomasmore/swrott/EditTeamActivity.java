@@ -84,6 +84,11 @@ public class EditTeamActivity extends AppCompatActivity {
             case R.id.action_delete:
                 showDialog();
                 return true;
+            case R.id.action_add:
+                Intent addMemberIntent = new Intent(EditTeamActivity.this, AddMember.class);
+                addMemberIntent.putExtra(Helper.TEAMID_MESSAGE, _team.getId());
+                startActivityForResult(addMemberIntent, 1);
+                return true;
             case R.id.action_fight:
                 Intent intent = new Intent(this, StartFight.class);
                 intent.putExtra(Helper.TEAMID_MESSAGE, _team.getId());
@@ -132,14 +137,14 @@ public class EditTeamActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1);
             }
         });
-        addMember.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EditTeamActivity.this, AddMember.class);
-                intent.putExtra(Helper.TEAMID_MESSAGE, _team.getId());
-                startActivityForResult(intent, 1);
-            }
-        });
+//        addMember.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(EditTeamActivity.this, AddMember.class);
+//                intent.putExtra(Helper.TEAMID_MESSAGE, _team.getId());
+//                startActivityForResult(intent, 1);
+//            }
+//        });
         if (_team.getMembers().size() >= Helper.MAXMEMBERS) {
             addMember.setVisibility(View.GONE);
         }

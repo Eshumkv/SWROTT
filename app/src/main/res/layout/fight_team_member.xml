@@ -23,6 +23,9 @@
         android:gravity="center"
         android:textColor="@color/colorWhite"
         android:shadowColor="@color/colorBlack"
+        android:shadowDx="-2"
+        android:shadowDy="2"
+        android:shadowRadius="0.01"
         android:layout_margin="@dimen/small_margin"
         android:textSize="@dimen/textSize"
         android:text="Luke Skywalker" />
@@ -35,5 +38,9 @@
         android:layout_centerHorizontal="true"
         android:textSize="@dimen/textSize"
         android:gravity="center"
+        android:shadowColor="@color/colorBlack"
+        android:shadowDx="-2"
+        android:shadowDy="2"
+        android:shadowRadius="0.01"
         android:text="Lvl 10" />
 </RelativeLayout>

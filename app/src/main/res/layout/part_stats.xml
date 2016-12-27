@@ -36,7 +36,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="1dip"
                     android:background="@color/colorHRule"
-                    android:layout_marginBottom="@dimen/bigger_margin" />
+                    android:layout_marginBottom="@dimen/small_margin" />
             </LinearLayout>
 
             <TableLayout
@@ -45,97 +45,6 @@
                 android:stretchColumns="1">
 
                 <TableRow>
-
-                    <TextView
-                        android:id="@+id/defense"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/textSize"
-                        android:layout_marginLeft="@dimen/normal_margin"
-                        android:layout_marginStart="@dimen/normal_margin"
-                        android:layout_marginBottom="2dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/stat_defense"
-                        android:textSize="@dimen/textSize"
-                        android:layout_marginLeft="@dimen/normal_margin"
-                        android:layout_marginStart="@dimen/normal_margin"
-                        android:layout_marginBottom="2dp" />
-                </TableRow>
-
-                <TableRow>
-
-                    <TextView
-                        android:id="@+id/attack"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/textSize"
-                        android:layout_marginLeft="@dimen/normal_margin"
-                        android:layout_marginStart="@dimen/normal_margin"
-                        android:layout_marginBottom="2dp"
-                        android:layout_marginTop="@dimen/normal_margin" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/stat_attack"
-                        android:textSize="@dimen/textSize"
-                        android:layout_marginLeft="@dimen/normal_margin"
-                        android:layout_marginStart="@dimen/normal_margin"
-                        android:layout_marginBottom="2dp"
-                        android:layout_marginTop="@dimen/normal_margin" />
-                </TableRow>
-
-                <TableRow>
-
-                    <TextView
-                        android:id="@+id/speed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/textSize"
-                        android:layout_marginLeft="@dimen/normal_margin"
-                        android:layout_marginStart="@dimen/normal_margin"
-                        android:layout_marginBottom="2dp"
-                        android:layout_marginTop="@dimen/normal_margin" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/stat_speed"
-                        android:textSize="@dimen/textSize"
-                        android:layout_marginLeft="@dimen/normal_margin"
-                        android:layout_marginStart="@dimen/normal_margin"
-                        android:layout_marginBottom="2dp"
-                        android:layout_marginTop="@dimen/normal_margin" />
-                </TableRow>
-
-                <TableRow>
-
-                    <TextView
-                        android:id="@+id/hp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/textSize"
-                        android:layout_marginLeft="@dimen/normal_margin"
-                        android:layout_marginStart="@dimen/normal_margin"
-                        android:layout_marginBottom="2dp"
-                        android:layout_marginTop="@dimen/normal_margin" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/stat_hp"
-                        android:textSize="@dimen/textSize"
-                        android:layout_marginLeft="@dimen/normal_margin"
-                        android:layout_marginStart="@dimen/normal_margin"
-                        android:layout_marginBottom="2dp"
-                        android:layout_marginTop="@dimen/normal_margin" />
-                </TableRow>
-
-                <TableRow>
-
                     <TextView
                         android:id="@+id/level"
                         android:layout_width="wrap_content"
@@ -158,7 +67,94 @@
                 </TableRow>
 
                 <TableRow>
+                    <TextView
+                        android:id="@+id/hp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/textSize"
+                        android:layout_marginLeft="@dimen/normal_margin"
+                        android:layout_marginStart="@dimen/normal_margin"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="@dimen/normal_margin" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/stat_hp"
+                        android:textSize="@dimen/textSize"
+                        android:layout_marginLeft="@dimen/normal_margin"
+                        android:layout_marginStart="@dimen/normal_margin"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="@dimen/normal_margin" />
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:id="@+id/attack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/textSize"
+                        android:layout_marginLeft="@dimen/normal_margin"
+                        android:layout_marginStart="@dimen/normal_margin"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="@dimen/normal_margin" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/stat_attack"
+                        android:textSize="@dimen/textSize"
+                        android:layout_marginLeft="@dimen/normal_margin"
+                        android:layout_marginStart="@dimen/normal_margin"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="@dimen/normal_margin" />
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:id="@+id/defense"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/textSize"
+                        android:layout_marginLeft="@dimen/normal_margin"
+                        android:layout_marginStart="@dimen/normal_margin"
+                        android:layout_marginTop="@dimen/normal_margin"
+                        android:layout_marginBottom="2dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/stat_defense"
+                        android:textSize="@dimen/textSize"
+                        android:layout_marginLeft="@dimen/normal_margin"
+                        android:layout_marginStart="@dimen/normal_margin"
+                        android:layout_marginTop="@dimen/normal_margin"
+                        android:layout_marginBottom="2dp" />
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:id="@+id/speed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/textSize"
+                        android:layout_marginLeft="@dimen/normal_margin"
+                        android:layout_marginStart="@dimen/normal_margin"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="@dimen/normal_margin" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/stat_speed"
+                        android:textSize="@dimen/textSize"
+                        android:layout_marginLeft="@dimen/normal_margin"
+                        android:layout_marginStart="@dimen/normal_margin"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="@dimen/normal_margin" />
+                </TableRow>
+
+                <TableRow>
                     <TextView
                         android:id="@+id/exp_to_level"
                         android:layout_width="wrap_content"

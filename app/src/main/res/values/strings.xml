@@ -4,6 +4,7 @@
     <string name="action_refresh">Refresh data</string>
     <string name="action_delete">Delete</string>
     <string name="action_about">About</string>
+    <string name="action_add_member">Add Member</string>
 
     <string name="dialog_spinner">Loading, may appear stuck...</string>
     <string name="dialog_no_internet">Do you want to load old data? If not, the app will quit. Try again when you have an active internet connection.</string>

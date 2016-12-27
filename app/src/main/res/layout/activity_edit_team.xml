@@ -47,7 +47,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1dip"
                 android:background="@color/colorHRule"
-                android:layout_marginBottom="@dimen/bigger_margin" />
+                android:layout_marginBottom="@dimen/small_margin" />
         </LinearLayout>
 
         <RelativeLayout
@@ -62,8 +62,10 @@
                 android:layout_gravity="center_vertical"
                 android:text="@string/edit_team_homeplanet_text"
                 android:textSize="@dimen/textSize"
-                android:layout_margin="10dp"
-                android:layout_alignParentLeft="true"/>
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
 
             <TextView
                 android:id="@+id/homeplanet"
@@ -73,45 +75,56 @@
                 android:gravity="center"
                 android:text="ALDERAAN"
                 android:textSize="@dimen/textSize"
-                android:layout_margin="10dp"
-                android:layout_alignParentRight="true"/>
+                android:layout_marginRight="@dimen/normal_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
         </RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/stat_experience"
-            android:textSize="@dimen/textSize"
-            android:layout_marginLeft="@dimen/normal_margin"
-            android:layout_marginStart="@dimen/normal_margin"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="@dimen/normal_margin" />
-
-        <ProgressBar
-            android:id="@+id/experience"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="10dp"
-            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/normal_margin"
             android:layout_marginStart="@dimen/normal_margin"
             android:layout_marginRight="@dimen/normal_margin"
-            android:layout_marginEnd="@dimen/normal_margin"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="@dimen/normal_margin" />
+            android:layout_marginEnd="@dimen/normal_margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/stat_experience"
+                android:textSize="@dimen/textSize" />
+
+            <ProgressBar
+                android:id="@+id/experience"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin" />
+        </LinearLayout>
 
 
-        <Button
-            android:id="@+id/add_member"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/edit_team_add_member"
-            android:layout_margin="10dp" />
+        <!--<Button-->
+            <!--android:id="@+id/add_member"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/edit_team_add_member"-->
+            <!--android:layout_marginLeft="@dimen/normal_margin"-->
+            <!--android:layout_marginStart="@dimen/normal_margin"-->
+            <!--android:layout_marginRight="@dimen/normal_margin"-->
+            <!--android:layout_marginEnd="@dimen/normal_margin"-->
+            <!--android:layout_marginBottom="@dimen/small_margin"-->
+            <!--android:layout_marginTop="@dimen/small_margin" />-->
 
         <LinearLayout
             android:id="@+id/header"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/normal_margin">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -128,14 +141,17 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1dip"
                 android:background="@color/colorHRule"
-                android:layout_marginBottom="@dimen/bigger_margin" />
+                android:layout_marginBottom="@dimen/small_margin" />
         </LinearLayout>
 
         <ListView
             android:id="@+id/listViewMembers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/normal_margin">
+            android:layout_marginLeft="@dimen/normal_margin"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginRight="@dimen/normal_margin"
+            android:layout_marginEnd="@dimen/normal_margin">
         </ListView>
 
         <TextView

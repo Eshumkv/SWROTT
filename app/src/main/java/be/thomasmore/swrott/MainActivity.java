@@ -173,6 +173,9 @@ public class MainActivity extends AppCompatActivity {
 
         menu.findItem(R.id.action_fight).setVisible(teams.size() != 0);
 
+        // Can't refresh for now
+        menu.findItem(R.id.action_refresh).setVisible(false);
+
         return true;
     }
 

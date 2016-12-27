@@ -60,6 +60,12 @@ public class StartFight extends AppCompatActivity {
                 }
             });
 
+            // Check the first option
+            if (i == 0) {
+                rb.setChecked(true);
+                _selectedId = (long) rb.getTag();
+            }
+
             rgroup.addView(rbView);
         }
 

@@ -115,6 +115,9 @@ public class EditMember extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_edit, menu);
 
+        // We don't need the add action here
+        menu.findItem(R.id.action_add).setVisible(false);
+
         return true;
     }
 
