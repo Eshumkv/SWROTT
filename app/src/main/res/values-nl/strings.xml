@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">SWROTT</string>
+    <string name="app_name">ROTT</string>
     <string name="action_fight">Vecht</string>
     <string name="action_refresh">Hernieuw data</string>
     <string name="action_delete">Verwijder</string>
@@ -43,7 +43,7 @@
     <string name="list_member_empty">Geen teamleden</string>
 
 
-    <string name="splash_starwars">STAR WARS</string>
+    <string name="splash_starwars"></string>
     <string name="splash_title">Return Of The Team</string>
 
     <string name="main_make_team">Maak team</string>
