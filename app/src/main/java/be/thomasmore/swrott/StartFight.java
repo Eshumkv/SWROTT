@@ -41,6 +41,7 @@ public class StartFight extends AppCompatActivity {
             return;
         }
 
+        // Populate the radio group with radio buttons to select a team
         RadioGroup rgroup = (RadioGroup) findViewById(R.id.teams);
         Button fightButton = (Button) findViewById(R.id.fight);
 
@@ -60,7 +61,7 @@ public class StartFight extends AppCompatActivity {
                 }
             });
 
-            // Check the first option
+            // Set the first radio button to be checked
             if (i == 0) {
                 rb.setChecked(true);
                 _selectedId = (long) rb.getTag();

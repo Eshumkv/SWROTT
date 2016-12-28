@@ -37,9 +37,14 @@ public class FightResult extends AppCompatActivity {
         setup();
     }
 
+    /**
+     * Setup this activity
+     */
     private void setup() {
         final FightOutcome outcome = (FightOutcome) getIntent().getSerializableExtra(Helper.OUTCOME_MESSAGE);
 
+        // We didn't get an outcome.
+        // Surely something went wrong
         if (outcome == null) {
             Log.e("HELPER ERROR", "Seriously don't know what to do");
             Helper.showErrorDialog(this, MainActivity.class);

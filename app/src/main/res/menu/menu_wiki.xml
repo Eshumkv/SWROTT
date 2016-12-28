@@ -10,8 +10,24 @@
         android:title="@string/action_wiki_home" />
 
     <item
-        android:id="@+id/action_refresh_wiki"
+        android:id="@+id/action_wookieepedia_search"
         android:orderInCategory="2"
+        android:icon="@drawable/wookieepedia_icon"
+        app:showAsAction="ifRoom"
+        android:title="@string/action_wookieepedia_search"
+        android:visible="false"/>
+
+    <item
+        android:id="@+id/action_image_search"
+        android:orderInCategory="3"
+        android:icon="@drawable/google_icon"
+        app:showAsAction="ifRoom"
+        android:title="@string/action_image_search"
+        android:visible="false"/>
+
+    <item
+        android:id="@+id/action_refresh_wiki"
+        android:orderInCategory="4"
         android:icon="@drawable/refresh_icon"
         app:showAsAction="ifRoom"
         android:title="@string/action_refresh_wiki" />

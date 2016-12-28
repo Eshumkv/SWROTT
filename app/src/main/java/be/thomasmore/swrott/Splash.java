@@ -78,11 +78,12 @@ public class Splash extends AppCompatActivity {
                 .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Load the old data
+                        // Load the old data (bundled with apk)
                         List<Planet> planets = Helper.deserializeObj(getApplicationContext(), "planets.ser", true);
                         List<Species> species = Helper.deserializeObj(getApplicationContext(), "species.ser", true);
                         List<People> people = Helper.deserializeObj(getApplicationContext(), "people.ser", true);
 
+                        // This is pretty inefficient, but seems like the best way
                         db.deleteAllPlanets();
                         db.deleteAllSpecies();
                         db.deleteAllPeople();
@@ -91,6 +92,7 @@ public class Splash extends AppCompatActivity {
                         db.insertSpecies(species);
                         db.insertPeoples(people);
 
+                        // Loaded the data, so now just wait a bit
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -129,6 +131,11 @@ public class Splash extends AppCompatActivity {
             }
         }).start();
 
+        // Execute all the HTTPReaders to download Planets, Species and People
+        // This tends to take a while.
+        // When we need to update, we use a RootsReader. This is used because SWAPI
+        // gives you back 10 results only and a link to the next 10 results.
+        // We need to parse them all, so there's a specific class to do that.
         final String planetUrl = "http://swapi.co/api/planets/";
         new HttpReader(new HttpReader.OnResultReadyListener() {
             @Override
@@ -231,6 +238,10 @@ public class Splash extends AppCompatActivity {
         db.cleanUpTeamAndMembers();
     }
 
+    /**
+     * This makes sure the pictures that are bundled with the app are on the
+     * device. Otherwise, we can't load it well.
+     */
     private void handlePictures() {
         // Handle pictures
         // If the standard picture does not exist, just add it
@@ -277,8 +288,7 @@ public class Splash extends AppCompatActivity {
     }
 
     private void goToMain() {
-        Intent mainIntent = new Intent(Splash.this, MainActivity.class);
-        this.startActivity(mainIntent);
-        this.finish();
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 }

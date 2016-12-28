@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -28,6 +29,8 @@ import android.widget.TextView;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import be.thomasmore.swrott.data.DatabaseHelper;
@@ -103,20 +106,26 @@ public class Wiki extends AppCompatActivity {
 
         boolean homeVisible = false;
         boolean refreshVisible = true;
+        boolean searchVisible = false;
 
         if (_type == WikiType.NONE) {
             refreshVisible = false;
             homeVisible = false;
+            searchVisible = false;
         } else if (_type == WikiType.ListPlanets || _type == WikiType.ListSpecies || _type == WikiType.ListPeople) {
             refreshVisible = true;
             homeVisible = true;
+            searchVisible = false;
         } else {
             refreshVisible = true;
             homeVisible = true;
+            searchVisible = true;
         }
 
         menu.findItem(R.id.action_refresh_wiki).setVisible(refreshVisible);
         menu.findItem(R.id.action_wiki_home).setVisible(homeVisible);
+        menu.findItem(R.id.action_image_search).setVisible(searchVisible);
+        menu.findItem(R.id.action_wookieepedia_search).setVisible(searchVisible);
 
         return true;
     }
@@ -132,6 +141,12 @@ public class Wiki extends AppCompatActivity {
                 return true;
             case R.id.action_refresh_wiki:
                 refresh();
+                return true;
+            case R.id.action_image_search:
+                searchInBrowser(true);
+                return true;
+            case R.id.action_wookieepedia_search:
+                searchInBrowser(false);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -227,13 +242,17 @@ public class Wiki extends AppCompatActivity {
 
         // Set the planet
         final Planet p = _db.getPlanet(person.getHomeworldId());
-        homeworld.setText(p.getName());
-        homeworld.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gotoWiki(WikiType.Planet, p.getId());
-            }
-        });
+        if (p != null) {
+            homeworld.setText(p.getName());
+            homeworld.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    gotoWiki(WikiType.Planet, p.getId());
+                }
+            });
+        } else {
+            homeworld.setText(Helper.getXmlString(this, R.string.wiki_species_unknown_planet));
+        }
 
         // Set the species
         List<Long> si = person.getSpeciesIds();
@@ -308,18 +327,26 @@ public class Wiki extends AppCompatActivity {
         List<Long> rs = planet.getResidentIds();
 
         if (rs.size() != 0) {
-            final List<People> people = new ArrayList<>();
+            final List<People> peopleList = new ArrayList<>();
 
             for (long residentId : rs) {
-                People p = _db.getPeople(residentId);
-                people.add(p);
+                peopleList.add(_db.getPeople(residentId));
+            }
 
+            Collections.sort(peopleList, new Comparator<People>() {
+                @Override
+                public int compare(People o1, People o2) {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            });
+
+            for (People person : peopleList) {
                 View listitem = inflater.inflate(R.layout.wiki_resident_listitem, null);
 
                 TextView t = (TextView) listitem.findViewById(R.id.text);
-                t.setText(p.getName());
+                t.setText(person.getName());
 
-                listitem.setTag(p.getId());
+                listitem.setTag(person.getId());
                 listitem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -371,13 +398,17 @@ public class Wiki extends AppCompatActivity {
         language.setText(species.getLanguage());
 
         final Planet p = _db.getPlanet(species.getHomeworldId());
-        homeworld.setText(p.getName());
-        homeworld.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gotoWiki(WikiType.Planet, p.getId());
-            }
-        });
+        if (p != null) {
+            homeworld.setText(p.getName());
+            homeworld.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    gotoWiki(WikiType.Planet, p.getId());
+                }
+            });
+        } else {
+            homeworld.setText(Helper.getXmlString(this, R.string.wiki_species_unknown_planet));
+        }
 
         // People
         List<Long> peopleIds = species.getPeopleIds();
@@ -386,15 +417,23 @@ public class Wiki extends AppCompatActivity {
             final List<People> peopleList = new ArrayList<>();
 
             for (long peopleId : peopleIds) {
-                People pp = _db.getPeople(peopleId);
-                peopleList.add(pp);
+                peopleList.add(_db.getPeople(peopleId));
+            }
 
+            Collections.sort(peopleList, new Comparator<People>() {
+                @Override
+                public int compare(People o1, People o2) {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            });
+
+            for (People person : peopleList) {
                 View listitem = inflater.inflate(R.layout.wiki_resident_listitem, null);
 
                 TextView t = (TextView) listitem.findViewById(R.id.text);
-                t.setText(pp.getName());
+                t.setText(person.getName());
 
-                listitem.setTag(pp.getId());
+                listitem.setTag(person.getId());
                 listitem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -520,6 +559,7 @@ public class Wiki extends AppCompatActivity {
 
         parent.addView(main);
     }
+
     /**
      * Refresh the data, i.e. get the correct data from the internet
      */
@@ -673,6 +713,39 @@ public class Wiki extends AppCompatActivity {
             default:
                 // Shouldn't get here
                 break;
+        }
+    }
+
+    private void searchInBrowser(boolean isImageSearch) {
+        String keyword = null;
+
+        switch (_type) {
+            case People:
+                People person = _db.getPeople(_id);
+                keyword = person.getName();
+                break;
+            case Planet:
+                Planet planet = _db.getPlanet(_id);
+                keyword = planet.getName();
+                break;
+            case Species:
+                Species species = _db.getSpecies(_id);
+                keyword = species.getName();
+                break;
+            case ListSpecies:
+            case ListPeople:
+            case ListPlanets:
+            default:
+                // Shouldn't get here
+                break;
+        }
+
+        if (keyword != null) {
+            if (isImageSearch) {
+                Helper.showGoogleImageSearch(this, keyword);
+            } else {
+                Helper.showWookieepediaSearch(this, keyword);
+            }
         }
     }
 }

@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         db = new DatabaseHelper(this);
 
+        // Delete any system entities that are left
         db.cleanUpTeamAndMembers();
 
         teams = db.getAllTeams();
@@ -68,12 +69,10 @@ public class MainActivity extends AppCompatActivity {
         listviewTeams.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parentView, View childView, int position, long id) {
-
                 Team team = teams.get(position);
                 Intent intent = new Intent(MainActivity.this, EditTeamActivity.class);
                 intent.putExtra(Helper.TEAMID_MESSAGE, team.getId());
                 startActivity(intent);
-
             }
         });
 
@@ -88,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
         checkButton();
     }
 
+    /**
+     * Check to see if we need to disable the button to add a team.
+     */
     private void checkButton() {
         final Button button = (Button) findViewById(R.id.make_team);
         if (teams.size() >= Helper.MAXTEAMS) {
@@ -95,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Show the dialog where you make a team.
+     */
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
@@ -102,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
         View dialogView = inflater.inflate(R.layout.dialog_make_team, null);
 
+        // Load the spinner
         final Spinner homeworldSpinner = (Spinner) dialogView.findViewById(R.id.homeplanet);
         homeworldSpinner.setAdapter(new ArrayAdapter<Planet>(
                 this,
@@ -128,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     // Keep this empty, because we override it later
+                    // I forgot why this is needed, but we need to add the clicklistener
+                    // after the dialog is shown
                 }
             })
             .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
@@ -142,29 +150,26 @@ public class MainActivity extends AppCompatActivity {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean wantToClose = false;
-                String teamName = teamnameText.getText().toString();
+                final String teamName = teamnameText.getText().toString();
 
-                if (!teamName.equals("")) {
-                    Team newTeam = new Team();
-
-                    Planet planet = (Planet) homeworldSpinner.getSelectedItem();
-
-                    newTeam.setName(teamName);
-                    newTeam.setPlanet(planet);
-
-                    db.insertTeam(newTeam);
-                    wantToClose = true;
+                if (teamName.equals("")) {
+                    return;
                 }
 
-                if (wantToClose) {
-                    teamAdapter.clear();
-                    teamAdapter.addAll(db.getAllTeams());
-                    teamAdapter.notifyDataSetChanged();
-                    checkButton();
-                    invalidateOptionsMenu();
-                    dialog.dismiss();
-                }
+                Team newTeam = new Team();
+                Planet planet = (Planet) homeworldSpinner.getSelectedItem();
+
+                newTeam.setName(teamName);
+                newTeam.setPlanet(planet);
+
+                db.insertTeam(newTeam);
+
+                teamAdapter.clear();
+                teamAdapter.addAll(db.getAllTeams());
+                teamAdapter.notifyDataSetChanged();
+                checkButton();
+                invalidateOptionsMenu();
+                dialog.dismiss();
             }
         });
 

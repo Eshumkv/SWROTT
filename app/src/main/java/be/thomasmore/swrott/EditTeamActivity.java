@@ -47,7 +47,6 @@ public class EditTeamActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         long teamId = Helper.getLongExtra(this, Helper.TEAMID_MESSAGE, null);
-
         if (teamId == -1) return;
 
         _db = new DatabaseHelper(this);
@@ -59,17 +58,11 @@ public class EditTeamActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                // empty for now
-            }
+            // We don't care about the resultCode
 
-            long teamId = data.getLongExtra(Helper.TEAMID_MESSAGE, -1);
+            long teamId = Helper.getLongExtra(this, Helper.TEAMID_MESSAGE, null);
+            if (teamId == -1) return;
 
-            if (teamId == -1) {
-                Log.e("ERROR", "Seriously don't know what to do");
-                Helper.showErrorDialog(this, MainActivity.class);
-                return;
-            }
             setup(teamId);
         }
     }
@@ -79,6 +72,9 @@ public class EditTeamActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_edit, menu);
 
+        if (_team.getMembers().size() >= Helper.MAXMEMBERS) {
+            menu.findItem(R.id.action_add).setVisible(false);
+        }
         menu.findItem(R.id.action_edit).setVisible(true);
 
         return true;
@@ -112,16 +108,20 @@ public class EditTeamActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Setup this activity.
+     * @param teamId The teamId with which to setup this activity
+     */
     private void setup(long teamId) {
         _team = _db.getTeamFull(teamId);
 
         final TextView teamName = (TextView) findViewById(R.id.teamname);
         final TextView homeworld = (TextView) findViewById(R.id.homeplanet);
         final ListView members = (ListView) findViewById(R.id.listViewMembers);
-        final Button addMember = (Button) findViewById(R.id.add_member);
         final Planet planet = _db.getPlanet(_team.getPlanetId());
         final ProgressBar expProgressBar = (ProgressBar) findViewById(R.id.experience);
 
+        // Calculate the teamlevel and experience
         final int oneTeamLevel = Member.MAX_EV / Team.MAX_LEVEL;
         final int teamExp = _team.getTeamExperience();
         final int teamLevel = Math.max((int) Math.ceil(teamExp / (double) oneTeamLevel), 1);
@@ -138,6 +138,7 @@ public class EditTeamActivity extends AppCompatActivity {
         homeworld.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                // Go to the wiki
                 Intent intent = new Intent(EditTeamActivity.this, Wiki.class);
                 intent.putExtra(Helper.WIKI_TYPE_MESSAGE, WikiType.Planet);
                 intent.putExtra(Helper.WIKI_MESSAGE, planet.getId());
@@ -161,19 +162,13 @@ public class EditTeamActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1);
             }
         });
-//        addMember.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(EditTeamActivity.this, AddMember.class);
-//                intent.putExtra(Helper.TEAMID_MESSAGE, _team.getId());
-//                startActivityForResult(intent, 1);
-//            }
-//        });
-        if (_team.getMembers().size() >= Helper.MAXMEMBERS) {
-            addMember.setVisibility(View.GONE);
-        }
+
+        invalidateOptionsMenu();
     }
 
+    /**
+     * Show the dialog to confirm to delete the team.
+     */
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
@@ -201,6 +196,9 @@ public class EditTeamActivity extends AppCompatActivity {
             .show();
     }
 
+    /**
+     * Show the dialog to edit the teamname
+     */
     private void showEditDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();

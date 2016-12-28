@@ -47,15 +47,14 @@ public class AddMember extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         _teamId = Helper.getLongExtra(this, Helper.TEAMID_MESSAGE, null);
-
         if (_teamId == -1) return;
 
-        _peoplePos = -1;
-        _db = new DatabaseHelper(this);
-        _people = _db.getAllPeople();
-        _currentMembers = _db.getMembers(_teamId);
-        _cachedStats = new HashMap<>();
-        final Team t = _db.getTeam(_teamId);
+        _peoplePos      = -1;
+        _db             = new DatabaseHelper(this);
+        _cachedStats    = new HashMap<>();
+        final Team t    = _db.getTeamFull(_teamId);
+        _currentMembers = t.getMembers();
+        _people         = _db.getAllPeopleExcept(_currentMembers);
 
         final TextView headerText = (TextView) findViewById(R.id.textView);
         headerText.setText(Helper.getXmlString(this, R.string.add_member_header) + " (" + t.getName() + ")");
@@ -115,6 +114,12 @@ public class AddMember extends AppCompatActivity {
         });
     }
 
+    /**
+     * Does this list contain that member id?
+     * @param members The list to check
+     * @param peopleId the id to check against
+     * @return boolean True if it contains that id, else false
+     */
     private boolean containsPerson(List<Member> members, long peopleId) {
         for (Member m: members) {
             if (m.getPeopleId() == peopleId) {
@@ -125,6 +130,12 @@ public class AddMember extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Helper method to get stats.
+     * If the stats have been cached, get those, otherwise generate new.
+     * @param charId The peopleId
+     * @return Stats The cached stats or newly generated ones.
+     */
     private Stats getStats(long charId) {
         if (_cachedStats.containsKey(charId)) {
             return _cachedStats.get(charId);

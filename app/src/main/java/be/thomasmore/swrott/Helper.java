@@ -1,6 +1,7 @@
 package be.thomasmore.swrott;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.content.res.AssetManager;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.SystemClock;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
@@ -32,6 +34,7 @@ import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -159,10 +162,50 @@ public class Helper {
                 .show();
     }
 
+    public static void showGoogleImageSearch(Context c, String keyword) {
+        final String url = "http://www.google.be/search?q=star+wars+" + URLEncoder.encode(keyword) + "&tbm=isch";
+        showBrowser(c, Uri.parse(url));
+    }
+
+    public static void showWookieepediaSearch(Context c, String keyword) {
+        final String url = "http://starwars.wikia.com/wiki/Special:Search?search=" + URLEncoder.encode(keyword);
+        showBrowser(c, Uri.parse(url));
+    }
+
+    private static void showBrowser(Context c, Uri url) {
+        Intent browser = new Intent(Intent.ACTION_VIEW);
+        browser.setData(url);
+        try {
+            c.startActivity(browser);
+        } catch (ActivityNotFoundException e) {
+            new AlertDialog.Builder(c)
+                    .setTitle(R.string.dialog_error_title)
+                    .setMessage(R.string.dialog_error_no_browser)
+                    .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .create()
+                    .show();
+        }
+    }
+
+    /**
+     * Tries to get a long back from the intent.
+     * Shows an error dialog when it fails and goes to a designated activity.
+     * @param c The context
+     * @param name The name of the Extra to get from the intent
+     * @param clsOnError The class of the activity. If null, goes to the MainActivity
+     * @param <T> The Type param of the class
+     * @return long The result or -1 if it fails. NEED TO CHECK THIS IN CODE!
+     */
     public static <T> long getLongExtra(final Context c, String name, final Class<T> clsOnError) {
         long result = ((Activity)c).getIntent().getLongExtra(name, -1);
+
         if (result == -1) {
             Log.e("HELPER ERROR", "Seriously don't know what to do");
+
             if (clsOnError == null) {
                 Helper.showErrorDialog(c, MainActivity.class);
             } else {
@@ -170,6 +213,7 @@ public class Helper {
             }
             return -1;
         }
+
         return result;
     }
 
@@ -227,7 +271,13 @@ public class Helper {
         return null;
     }
 
-    public static void updateStatsPart(Stats stats, AppCompatActivity app) {
+    /**
+     * A helper to use when you use the stats part view.
+     * This will update the Stats
+     * @param stats The stats that you want to show.
+     * @param app The activity which contains the stats part
+     */
+    public static void updateStatsPart( Stats stats, Activity app) {
         TextView txtAttack = (TextView) app.findViewById(R.id.attack);
         TextView txtDefense = (TextView) app.findViewById(R.id.defense);
         TextView txtSpeed = (TextView) app.findViewById(R.id.speed);

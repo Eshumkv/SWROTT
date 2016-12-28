@@ -9,6 +9,8 @@
     <string name="action_refresh_wiki">Refresh</string>
     <string name="action_wiki_home">Home</string>
     <string name="action_edit">Edit</string>
+    <string name="action_image_search">Search image</string>
+    <string name="action_wookieepedia_search">Wookieepedia</string>
 
     <string name="dialog_spinner">Loading, may appear stuck...</string>
     <string name="dialog_no_internet">Do you want to load old data? If not, the app will quit. Try again when you have an active internet connection.</string>
@@ -26,6 +28,7 @@
 
     <string name="dialog_error_title">Error</string>
     <string name="dialog_error_no_internet">There is no internet.</string>
+    <string name="dialog_error_no_browser">There is no browser installed or this app was forbidden from starting it.</string>
     <string name="dialog_error_should_not_happen">Something really went wrong.</string>
     <string name="dialog_error_no_members_in_team">There are no members in your team!</string>
     <string name="dialog_error_char_already_in_team">This character is already in this team.</string>
@@ -111,5 +114,6 @@
     <string name="wiki_species_homeworld">Homeworld</string>
     <string name="wiki_species_language">Language</string>
     <string name="wiki_species_people">People</string>
+    <string name="wiki_species_unknown_planet">Unknown</string>
 
 </resources>

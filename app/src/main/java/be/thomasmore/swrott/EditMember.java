@@ -37,20 +37,17 @@ public class EditMember extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-//        _memberId = getIntent().getLongExtra(Helper.MEMBERID_MESSAGE, -1);
-//        if (_memberId == -1) {
-//            Log.e("ERROR", "Seriously don't know what to do");
-//            Helper.showErrorDialog(this, MainActivity.class);
-//            return;
-//        }
         _memberId = Helper.getLongExtra(this, Helper.MEMBERID_MESSAGE, null);
-
         if (_memberId == -1) return;
 
         _db = new DatabaseHelper(this);
         setup(_memberId);
     }
 
+    /**
+     * Setup this activity
+     * @param memberId The memberId used to setup the activity.
+     */
     private void setup(long memberId) {
         _member = _db.getMember(memberId);
 
@@ -67,6 +64,9 @@ public class EditMember extends AppCompatActivity {
 
         Helper.updateStatsPart(_member.getStats(), this);
 
+        // Load the picture
+        // There is a slim chance it will take a while to load it,
+        // So run it on another thread.
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -95,17 +95,11 @@ public class EditMember extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                // Empty for now
-            }
+            // Don't need the resulCode
 
-            _memberId = data.getLongExtra(Helper.MEMBERID_MESSAGE, -1);
+            _memberId = Helper.getLongExtra(this, Helper.MEMBERID_MESSAGE, null);
+            if (_memberId == -1) return;
 
-            if (_memberId == -1) {
-                Log.e("ERROR", "Seriously don't know what to do");
-                Helper.showErrorDialog(this, MainActivity.class);
-                return;
-            }
             setup(_memberId);
         }
     }
@@ -117,6 +111,8 @@ public class EditMember extends AppCompatActivity {
 
         // We don't need the add action here
         menu.findItem(R.id.action_add).setVisible(false);
+
+        // We want the wiki!
         menu.findItem(R.id.action_wiki).setVisible(true);
 
         return true;

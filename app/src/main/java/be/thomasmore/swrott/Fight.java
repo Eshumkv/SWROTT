@@ -54,6 +54,7 @@ public class Fight extends AppCompatActivity {
         _team = _db.getTeamFull(teamId);
 
         // Does the team have members?
+        // Technically you shouldn't be able to get here if there aren't any members
         if (_team.getMembers().size() < 1) {
             Helper.showErrorDialog(
                     this,
@@ -63,13 +64,13 @@ public class Fight extends AppCompatActivity {
             return;
         }
 
+        // Get the picture for all the members in your team.
         for (Member m : _team.getMembers()) {
             m.setPicture(_db.getPicture(m.getPictureId()));
         }
 
         // Create random team within parameters
         Team enemy = FightHelper.getEnemy(_team, _db.getAllPeople());
-
         enemy = _db.insertTeamFull(enemy);
 
         setupLayout(_team, enemy);
@@ -118,24 +119,12 @@ public class Fight extends AppCompatActivity {
 
         // Calculate the time for each 'defeat'
         int deaths = outcome.getDeaths().size();
-        final int time = WAIT_TIME / deaths + 1;    // Add one extra for the one below
+        final int time = WAIT_TIME / (deaths + 1);    // Add one, because we wait an extra time
         final boolean[] results = new boolean[deaths];
-        int f1Index = 1;
-        int f2Index = 1;
 
         for (int i = 1; i <= deaths; i++) {
-            int side = 1;
-            int member = f1Index;
             int index = i - 1;
             FightOutcomeDeath fod = outcome.getDeaths().get(index);
-
-            if (fod.getTeamId() == enemy.getId()) {
-                side = 2;
-                member = f2Index;
-                f2Index++;
-            } else {
-                f1Index++;
-            }
 
             new Handler()
                 .postDelayed(
@@ -181,6 +170,11 @@ public class Fight extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Setup the team layout for both teams
+     * @param f1 The first team
+     * @param f2 The second team
+     */
     private void setupLayout(Team f1, Team f2) {
         final TextView f1NameText = (TextView) findViewById(R.id.fighter1_name);
         final TextView f2NameText = (TextView) findViewById(R.id.fighter2_name);
@@ -188,6 +182,8 @@ public class Fight extends AppCompatActivity {
         f1NameText.setText(f1.getName());
         f2NameText.setText(f2.getName());
 
+        // Get an XML array
+        // This contains the images we're going to use for the enemy
         TypedArray array = getResources().obtainTypedArray(R.array.fight_icons);
         List<Integer> icons = new ArrayList<>();
 
@@ -196,6 +192,8 @@ public class Fight extends AppCompatActivity {
             if (resId != 0)
                 icons.add(resId);
         }
+
+        // For memory reasons, we need to recycle this array
         array.recycle();
 
         GridView f1Grid = (GridView) findViewById(R.id.fighter1_members);
@@ -205,65 +203,5 @@ public class Fight extends AppCompatActivity {
         GridView f2Grid = (GridView) findViewById(R.id.fighter2_members);
         f2Grid.setAdapter(new FightAdapter(
                 this, f2.getMembers(), R.color.colorFighter2, true, icons));
-
-//        setupTeamView(R.id.fighter1, f1, true);
-//        setupTeamView(R.id.fighter2, f2, false);
-
-
-        // Old code
-//        for (int i = 1; i <= f1.getMembers().size(); i++) {
-//            final int resId = getResources().getIdentifier("f1_member_" + i, "id", getPackageName());
-//            final ImageView img = (ImageView) findViewById(resId);
-//            img.setVisibility(View.VISIBLE);
-//        }
-//
-//        for (int i = 1; i <= f2.getMembers().size(); i++) {
-//            final int resId = getResources().getIdentifier("f2_member_" + i, "id", getPackageName());
-//            final ImageView img = (ImageView) findViewById(resId);
-//            img.setVisibility(View.VISIBLE);
-//        }
     }
-
-//    private void setupTeamView2(int resId, Team team, boolean isUser) {
-//        final int icon = Helper.randomBetween(0, 1) == 1 ? R.drawable.fighter1_icon : R.drawable.fighter2_icon;
-//        final LinearLayout teamLLayout = (LinearLayout) findViewById(resId);
-//
-//        LayoutInflater inflater = getLayoutInflater();
-//        //View container = inflater.inflate(R.layout.fight_team_container, null);
-//        ViewStub stub = (ViewStub) findViewById(isUser ? R.id.layout_stub : R.id.layout_stub2);
-//        stub.setLayoutResource(R.layout.fight_team_container);
-//        View container = stub.inflate();
-//
-//        final LinearLayout topView = (LinearLayout) container.findViewById(R.id.top);
-//        final LinearLayout bottomView = (LinearLayout) container.findViewById(R.id.bottom);
-//
-//        for (int i = 0; i < team.getMembers().size(); i++) {
-//            View teamMemberView = inflater.inflate(R.layout.fight_team_member, null);
-//            final ImageView picture = (ImageView) teamMemberView.findViewById(R.id.member_image);
-//            final TextView memberName = (TextView) teamMemberView.findViewById(R.id.member_name);
-//            final TextView memberLvl = (TextView) teamMemberView.findViewById(R.id.member_lvl);
-//            final Member member = team.getMembers().get(i);
-//
-//            picture.setTag("id_" + member.getId());
-//
-//            if (isUser) {
-//                picture.setImageBitmap(Helper.getPicture(this, _db.getPicture(member.getPictureId()).getPath(), 85, 85));
-//            } else {
-//                picture.setImageResource(icon);
-//            }
-//
-//            memberName.setText(member.getPerson().getName());
-//            memberLvl.setText(String.format("Lvl %d", member.getLevel()));
-//            picture.setBackgroundResource(isUser ? R.color.colorFighter1 : R.color.colorFighter2);
-//
-//            // Do we need to add it to the top or bottom view?
-//            if ( (i + 1) >= (Helper.MAXMEMBERS / 2)) {
-//                bottomView.addView(teamMemberView);
-//            } else {
-//                topView.addView(teamMemberView);
-//            }
-//        }
-//
-//        //teamLLayout.addView(container);
-//    }
 }

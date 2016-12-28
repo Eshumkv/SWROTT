@@ -35,7 +35,6 @@ public class ChoosePicture extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         _memberId = Helper.getLongExtra(this, Helper.MEMBERID_MESSAGE, null);
-
         if (_memberId == -1) return;
 
         _db = new DatabaseHelper(this);
@@ -92,9 +91,5 @@ public class ChoosePicture extends AppCompatActivity {
         intent.putExtra(Helper.MEMBERID_MESSAGE, _memberId);
         setResult(RESULT_OK, intent);
         finish();
-    }
-
-    private void toon(String text) {
-        Toast.makeText(getBaseContext(), text, Toast.LENGTH_SHORT).show();
     }
 }

@@ -1516,6 +1516,60 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * Get all people
+     * @return List A list of all people in the database
+     */
+    public List<People> getAllPeopleExcept(List<Member> members) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("SELECT id, name, birthYear, eyeColor, gender, hairColor, height, ")
+                .append("mass, skinColor, url, edited, homeworldId, species")
+                .append(" FROM ").append(PEOPLE)
+                .append(" WHERE id NOT IN (");
+
+        String prefix = "";
+        for (Member member : members) {
+            sb.append(prefix).append(member.getPeopleId());
+            prefix = ", ";
+        }
+
+        sb.append(") ORDER BY name ASC;");
+
+        Cursor cursor = db.rawQuery(sb.toString(), null);
+
+        List<People> people = new ArrayList<>();
+
+        if (cursor.moveToFirst()) {
+            do {
+                People obj = new People();
+
+                obj.setId(cursor.getLong(0));
+                obj.setName(cursor.getString(1));
+                obj.setBirthYear(cursor.getString(2));
+                obj.setEyeColor(cursor.getString(3));
+                obj.setGender(cursor.getString(4));
+                obj.setHairColor(cursor.getString(5));
+                obj.setHeight(cursor.getString(6));
+                obj.setMass(cursor.getString(7));
+                obj.setSkinColor(cursor.getString(8));
+                obj.setUrl(cursor.getString(9));
+                obj.setEdited(cursor.getString(10));
+                obj.setHomeworldId(cursor.getLong(11));
+                obj.setSpecies(cursor.getString(12));
+
+                people.add(obj);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return people;
+    }
+
+    /**
      * Get a count of all the people
      * @return int Number of rows in the People table
      */
@@ -1983,5 +2037,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public boolean deleteMember(long id) {
         return genericDelete(MEMBER, id);
+    }
+
+
+    /*************************************************************************/
+    /*************************************************************************/
+
+    /**
+     * Wanted to use it for the wiki, but the idea got scrapped
+     * @return
+     */
+    public List<String> getAllNames() {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("SELECT name FROM ").append(PLANET);
+        sb.append(" UNION ALL ");
+        sb.append("SELECT name FROM ").append(SPECIES);
+        sb.append(" UNION ALL ");
+        sb.append("SELECT name FROM ").append(PEOPLE);
+
+        Cursor cursor = db.rawQuery(sb.toString(), null);
+
+        List<String> names = new ArrayList<>();
+
+        if (cursor.moveToFirst()) {
+            do {
+                names.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return names;
     }
 }
