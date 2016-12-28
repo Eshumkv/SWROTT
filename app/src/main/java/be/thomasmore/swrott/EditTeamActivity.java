@@ -185,6 +185,7 @@ public class EditTeamActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(EditTeamActivity.this, MainActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             })
             .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
@@ -259,23 +260,20 @@ public class EditTeamActivity extends AppCompatActivity {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean wantToClose = false;
                 String teamName = teamnameText.getText().toString();
 
-                if (!teamName.equals("")) {
-                    Planet planet = (Planet) homeworldSpinner.getSelectedItem();
-
-                    _team.setName(teamName);
-                    _team.setPlanet(planet);
-                    _db.updateTeam(_team);
-                    wantToClose = true;
+                if (teamName.equals("")) {
+                    return;
                 }
 
-                if (wantToClose) {
-                    finish();
-                    startActivity(getIntent());
-                    dialog.dismiss();
-                }
+                Planet planet = (Planet) homeworldSpinner.getSelectedItem();
+
+                _team.setName(teamName);
+                _team.setPlanet(planet);
+                _db.updateTeam(_team);
+
+                setup(_team.getId());
+                dialog.dismiss();
             }
         });
     }

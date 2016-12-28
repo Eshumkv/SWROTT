@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, EditTeamActivity.class);
                 intent.putExtra(Helper.TEAMID_MESSAGE, team.getId());
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -279,5 +280,10 @@ public class MainActivity extends AppCompatActivity {
                 }).execute(speciesUrl);
             }
         }).execute(speciesUrl);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }
