@@ -214,6 +214,78 @@
         </TableRow>
     </TableLayout>
 
+
+    <!-- CLIMATE -->
+    <LinearLayout
+        android:id="@+id/climateHeader"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wiki_planet_climate"
+            android:textSize="@dimen/textSize"
+            android:layout_marginLeft="@dimen/normal_margin"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginBottom="2dp" />
+
+        <!--Horizontal rule-->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="@color/colorHRule"
+            android:layout_marginBottom="@dimen/small_margin" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/climateList"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/normal_margin"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginRight="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin">
+    </LinearLayout>
+
+    <!-- TERRAIN -->
+    <LinearLayout
+        android:id="@+id/terrainHeader"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wiki_planet_terrain"
+            android:textSize="@dimen/textSize"
+            android:layout_marginLeft="@dimen/normal_margin"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginBottom="2dp" />
+
+        <!--Horizontal rule-->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="@color/colorHRule"
+            android:layout_marginBottom="@dimen/small_margin" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/terrainList"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/normal_margin"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginRight="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin">
+    </LinearLayout>
+
+    <!-- RESIDENTS -->
     <LinearLayout
         android:id="@+id/residentsHeader"
         android:orientation="vertical"
@@ -237,7 +309,6 @@
             android:background="@color/colorHRule"
             android:layout_marginBottom="@dimen/small_margin" />
     </LinearLayout>
-
     <LinearLayout
         android:id="@+id/residentsList"
         android:orientation="vertical"

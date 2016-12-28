@@ -283,23 +283,27 @@ public class Wiki extends AppCompatActivity {
         final TextView rotation = (TextView) main.findViewById(R.id.rotation);
         final TextView orbital = (TextView) main.findViewById(R.id.orbital);
         final TextView diameter = (TextView) main.findViewById(R.id.diameter);
-        final TextView climate = (TextView) main.findViewById(R.id.climate);
         final TextView gravity = (TextView) main.findViewById(R.id.gravity);
-        final TextView terrain = (TextView) main.findViewById(R.id.terrain);
         final TextView water = (TextView) main.findViewById(R.id.water);
         final TextView population = (TextView) main.findViewById(R.id.population);
+
         final LinearLayout residents = (LinearLayout) main.findViewById(R.id.residentsList);
         final LinearLayout residentsHeader = (LinearLayout) main.findViewById(R.id.residentsHeader);
+
+        final LinearLayout climate = (LinearLayout) main.findViewById(R.id.climateList);
+        final LinearLayout terrain = (LinearLayout) main.findViewById(R.id.terrainList);
 
         name.setText(planet.getName());
         rotation.setText(planet.getRotationPeriod());
         orbital.setText(planet.getOrbitalPeriod());
         diameter.setText(planet.getDiameter());
-        climate.setText(planet.getClimate());
         gravity.setText(planet.getGravity());
-        terrain.setText(planet.getTerrain());
         water.setText(planet.getSurfaceWater());
         population.setText(planet.getPopulation());
+
+        // Climate and terrain are compound too
+        fillStringSplitItems(planet.getClimate(), climate);
+        fillStringSplitItems(planet.getTerrain(), terrain);
 
         List<Long> rs = planet.getResidentIds();
 
@@ -404,9 +408,9 @@ public class Wiki extends AppCompatActivity {
             peopleHeader.setVisibility(View.GONE);
         }
 
-        fillColorItems(species.getSkinColors(), skin);
-        fillColorItems(species.getHairColors(), hair);
-        fillColorItems(species.getEyeColors(), eye);
+        fillStringSplitItems(species.getSkinColors(), skin);
+        fillStringSplitItems(species.getHairColors(), hair);
+        fillStringSplitItems(species.getEyeColors(), eye);
 
         parent.addView(main);
     }
@@ -416,7 +420,7 @@ public class Wiki extends AppCompatActivity {
      * @param toSplit The string to split
      * @param ll The LinearLayout
      */
-    private void fillColorItems(String toSplit, LinearLayout ll) {
+    private void fillStringSplitItems(String toSplit, LinearLayout ll) {
         LayoutInflater inflater = getLayoutInflater();
         String[] skinColors = toSplit.split(", ");
 

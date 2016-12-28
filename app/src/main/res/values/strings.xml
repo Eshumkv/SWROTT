@@ -8,12 +8,14 @@
     <string name="action_wiki">Wiki</string>
     <string name="action_refresh_wiki">Refresh</string>
     <string name="action_wiki_home">Home</string>
+    <string name="action_edit">Edit</string>
 
     <string name="dialog_spinner">Loading, may appear stuck...</string>
     <string name="dialog_no_internet">Do you want to load old data? If not, the app will quit. Try again when you have an active internet connection.</string>
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
     <string name="dialog_ok">OK</string>
+    <string name="dialog_edit_team">Update</string>
     <string name="dialog_teamname">Team name</string>
     <string name="dialog_homeplanet">Homeplanet</string>
     <string name="dialog_maketeam_title">Make a new team</string>

@@ -145,7 +145,8 @@
                 android:layout_marginLeft="@dimen/normal_margin"
                 android:layout_marginStart="@dimen/normal_margin"
                 android:layout_marginBottom="2dp"
-                android:layout_marginTop="@dimen/normal_margin" />
+                android:layout_marginTop="@dimen/normal_margin"
+                android:background="@drawable/textview_clickable" />
         </TableRow>
 
         <TableRow>

@@ -261,6 +261,8 @@ public class Splash extends AppCompatActivity {
             try {
                 out = new FileOutputStream(file);
                 out.write(bitmapdata);
+                // Needed to free some memory
+                bitmap.recycle();
             } catch (Exception e) {
                 Log.e("Splash", "Could not copy default profile image: " + e);
             } finally {
@@ -276,7 +278,7 @@ public class Splash extends AppCompatActivity {
 
     private void goToMain() {
         Intent mainIntent = new Intent(Splash.this, MainActivity.class);
-        Splash.this.startActivity(mainIntent);
-        Splash.this.finish();
+        this.startActivity(mainIntent);
+        this.finish();
     }
 }

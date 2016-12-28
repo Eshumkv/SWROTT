@@ -109,7 +109,7 @@ public class FightResult extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_back, menu);
+        getMenuInflater().inflate(R.menu.menu_fightresult, menu);
 
         return true;
     }
@@ -119,6 +119,12 @@ public class FightResult extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 done();
+                return true;
+            case R.id.action_fight:
+                _db.cleanUpTeamAndMembers();
+                Intent intent = new Intent(this, StartFight.class);
+                startActivity(intent);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

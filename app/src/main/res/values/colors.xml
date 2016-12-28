@@ -5,9 +5,11 @@
     <color name="colorAccent">#1A9195</color>
     <color name="colorHRule">#D9F6BC</color>
     <color name="colorBlack">#000000</color>
-    <color name="colorFighter1">#1A9195</color>
-    <color name="colorFighter2">#1A9195</color>
-    <color name="colorFighterDead">#ff0000</color>
+    <color name="colorFighter1">#216431</color>
+    <color name="colorFighter2">#037691</color>
+    <color name="colorFighterText">#D9F6BC</color>
+    <color name="colorFighterTextShadow">#000000</color>
+    <color name="colorFighterDead">#B42527</color>
     <color name="colorResultWin">#1A9195</color>
     <color name="colorResultLose">#DD1111</color>
     <color name="colorWhite">#eeeeee</color>

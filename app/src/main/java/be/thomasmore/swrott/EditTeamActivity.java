@@ -16,11 +16,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Random;
 
 import be.thomasmore.swrott.data.DatabaseHelper;
 import be.thomasmore.swrott.data.FightHelper;
@@ -75,12 +79,17 @@ public class EditTeamActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_edit, menu);
 
+        menu.findItem(R.id.action_edit).setVisible(true);
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                done();
+                return true;
             case R.id.action_delete:
                 showDialog();
                 return true;
@@ -94,6 +103,9 @@ public class EditTeamActivity extends AppCompatActivity {
                 intent.putExtra(Helper.TEAMID_MESSAGE, _team.getId());
                 startActivity(intent);
                 finish();
+                return true;
+            case R.id.action_edit:
+                showEditDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -187,5 +199,96 @@ public class EditTeamActivity extends AppCompatActivity {
             })
             .create()
             .show();
+    }
+
+    private void showEditDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final Random random = new Random();
+        final List<Planet> planets = _db.getAllPlanets();
+
+        View dialogView = inflater.inflate(R.layout.dialog_make_team, null);
+
+        final Spinner homeworldSpinner = (Spinner) dialogView.findViewById(R.id.homeplanet);
+        final ArrayAdapter spnrAdapter = new ArrayAdapter<Planet>(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                planets);
+        homeworldSpinner.setAdapter(spnrAdapter);
+
+        final EditText teamnameText = (EditText) dialogView.findViewById(R.id.teamname);
+        ImageButton randomName = (ImageButton) dialogView.findViewById(R.id.btnRandom);
+        randomName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String teamName = Helper.getRandomTeamName();
+                int planetIndex = random.nextInt(planets.size());
+
+                teamnameText.setText(teamName);
+                homeworldSpinner.setSelection(planetIndex);
+            }
+        });
+
+        // Set the name and planet
+        teamnameText.setText(_team.getName());
+
+        for (int i = 0; i < spnrAdapter.getCount(); i++) {
+            Planet testPlanet = (Planet) spnrAdapter.getItem(i);
+            if (testPlanet.getId() == _team.getPlanetId()) {
+                homeworldSpinner.setSelection(i);
+                break;
+            }
+        }
+
+        builder
+                .setView(dialogView)
+                .setTitle(R.string.dialog_maketeam_title)
+                .setPositiveButton(R.string.dialog_edit_team, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Keep this empty, because we override it later
+                    }
+                })
+                .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+
+        final AlertDialog dialog = builder.create();
+
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean wantToClose = false;
+                String teamName = teamnameText.getText().toString();
+
+                if (!teamName.equals("")) {
+                    Planet planet = (Planet) homeworldSpinner.getSelectedItem();
+
+                    _team.setName(teamName);
+                    _team.setPlanet(planet);
+                    _db.updateTeam(_team);
+                    wantToClose = true;
+                }
+
+                if (wantToClose) {
+                    finish();
+                    startActivity(getIntent());
+                    dialog.dismiss();
+                }
+            }
+        });
+    }
+
+    private void done() {
+        finish();
+        startActivity(new Intent(this, MainActivity.class));
+    }
+
+    @Override
+    public void onBackPressed() {
+        done();
     }
 }
