@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SWROTT</string>
+    <string name="action_fight">Vecht</string>
+    <string name="action_refresh">Hernieuw data</string>
+    <string name="action_delete">Verwijder</string>
+    <string name="action_about">Over</string>
+    <string name="action_add_member">Lid toevoegen</string>
+    <string name="action_wiki">Wiki</string>
+    <string name="action_refresh_wiki">Hernieuw</string>
+    <string name="action_wiki_home">Thuis</string>
+    <string name="action_edit">Bewerk</string>
+    <string name="action_image_search">Zoek afbeelding</string>
+    <string name="action_wookieepedia_search">Wookieepedia</string>
+
+    <string name="dialog_spinner">Laden, kan lijken of het vast zit ...</string>
+    <string name="dialog_no_internet">Wilt u oude data laden? Zo niet, zal de app sluiten. Probeer het opnieuw met een internet connectie.</string>
+    <string name="dialog_yes">Ja</string>
+    <string name="dialog_no">Nee</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_edit_team">Pas aan</string>
+    <string name="dialog_teamname">Team naam</string>
+    <string name="dialog_homeplanet">Thuisplaneet</string>
+    <string name="dialog_maketeam_title">Maak team</string>
+    <string name="dialog_deleteteam_title">VERWIJDER TEAM</string>
+    <string name="dialog_confirm_team_deletion">Bent u zeker dat u dit team wilt verwijderen? Deze actie kan NIET ongedaan worden.</string>
+    <string name="dialog_deletemember_title">VERWIJDER LID</string>
+    <string name="dialog_confirm_member_deletion">Bent u zeker dat u dit lid wilt verwijderen? Deze actie kan NIET ongedaan worden.</string>
+
+    <string name="dialog_error_title">Fout</string>
+    <string name="dialog_error_no_internet">Er is geen internet.</string>
+    <string name="dialog_error_no_browser">Er is geen browser geinstalleerd of de app was niet toegelaten om deze te starten.</string>
+    <string name="dialog_error_should_not_happen">Er ging iets mis.</string>
+    <string name="dialog_error_no_members_in_team">Er zijn geen leden in je team!</string>
+    <string name="dialog_error_char_already_in_team">Dit karakter zit al in je team.</string>
+
+
+    <string name="list_team_header">Jouw teams</string>
+    <string name="list_team_empty">Geen teams :(</string>
+
+    <string name="list_member_header">Jouw teamleden</string>
+    <string name="list_member_empty">Geen teamleden</string>
+
+
+    <string name="splash_starwars">STAR WARS</string>
+    <string name="splash_title">Return Of The Team</string>
+
+    <string name="main_make_team">Maak team</string>
+
+    <string name="edit_team_homeplanet_text">Thuisplaneet</string>
+    <string name="edit_team_add_member">Voeg lid toe</string>
+
+    <string name="add_member_header">Voeg lid toe</string>
+
+    <string name="stat_header">Eigenschappen</string>
+    <string name="stat_speed">Snelheid</string>
+    <string name="stat_attack">Aanval</string>
+    <string name="stat_defense">Verdediging</string>
+    <string name="stat_hp">Levenskracht</string>
+    <string name="stat_level">Level</string>
+    <string name="stat_experience">Ervaring</string>
+    <string name="stat_exp_to_level">Ervaring nodig</string>
+
+    <string name="about_author">Auteur</string>
+    <string name="about_blurb1">A long time ago in a galaxy far, far away there was an application about Star Wars. This application allows you to create a team of Star Wars characters. These characters will be attributed random stats, like attack and defense. This highly qualified and trained team needs a base of operations, obviously. That\'s why you\'ll choose a planet where your base will be located. To get around on this planet you will need a plethora of vehicles. Your team will have the choice of their vehicles. Of course, no fighting team would be complete without a starship</string>
+    <string name="about_blurb2">That\'s the gist of the application. With your composed team you will be able to attack random computer enemies and level up your characters. The higher your level, the more difficult the opponent. By destroying your enemies, you\'ll get access to more planets, characters and vehicles.</string>
+    <string name="about_blurb3">Become the new Empire!</string>
+
+    <string name="fight_start_title">Wie kies je om te vechten?</string>
+    <string name="fight_fight">Vecht</string>
+    <string name="fight_vs">VS</string>
+
+    <string name="fight_result_result">Resultaat</string>
+    <string name="fight_result_winner">Winnaar</string>
+    <string name="fight_result_view_log">Bekijk details</string>
+    <string name="title_activity_wiki">Wiki</string>
+
+    <string name="wiki_main_people">Lijst van karakters</string>
+    <string name="wiki_main_planets">Lijst van planeten</string>
+    <string name="wiki_main_species">Lijst van soorten</string>
+
+    <string name="wiki_list_people">Karakters</string>
+    <string name="wiki_list_planets">Planeten</string>
+    <string name="wiki_list_species">Soorten</string>
+
+    <string name="wiki_people_height">Hoogte</string>
+    <string name="wiki_people_mass">Gewicht</string>
+    <string name="wiki_people_hair_color">Haarkleur</string>
+    <string name="wiki_people_skin_color">Huidskleur</string>
+    <string name="wiki_people_eye_color">Oogkleur</string>
+    <string name="wiki_people_birth_year">Geboortejaar</string>
+    <string name="wiki_people_gender">Geslacht</string>
+    <string name="wiki_people_homeworld">Thuisplaneet</string>
+    <string name="wiki_people_species">Soort</string>
+
+    <string name="wiki_planet_name">Naam</string>
+    <string name="wiki_planet_rotation_period">Rotatie Periode</string>
+    <string name="wiki_planet_orbital_period">Omlooptijd</string>
+    <string name="wiki_planet_diameter">Diameter</string>
+    <string name="wiki_planet_climate">Klimaat</string>
+    <string name="wiki_planet_gravity">Zwaartekracht</string>
+    <string name="wiki_planet_terrain">Terrein</string>
+    <string name="wiki_planet_surface_water">Oppervlaktewater</string>
+    <string name="wiki_planet_population">Bevolking</string>
+    <string name="wiki_planet_residents">Bewoners</string>
+
+    <string name="wiki_species_name">Naam</string>
+    <string name="wiki_species_classification">Classificatie</string>
+    <string name="wiki_species_designation">Benaming</string>
+    <string name="wiki_species_average_height">Gemiddelde hoogte</string>
+    <string name="wiki_species_skin_colors">Huidskleuren</string>
+    <string name="wiki_species_hair_colors">Haarkleuren</string>
+    <string name="wiki_species_eye_colors">Oogkleuren</string>
+    <string name="wiki_species_average_lifespan">Gemmiddelde leeftijd</string>
+    <string name="wiki_species_homeworld">Thuisplaneet</string>
+    <string name="wiki_species_language">Taal</string>
+    <string name="wiki_species_people">Mensen</string>
+    <string name="wiki_species_unknown_planet">Onbekend</string>
+</resources>
