@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="be.thomasmore.swrott"
-    android:versionCode="1"
-    android:versionName="1">
+    package="be.thomasmore.rott"
+    android:versionCode="2"
+    android:versionName="2">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
@@ -17,17 +17,17 @@
         android:supportsRtl="true"
         android:theme="@style/rottTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="be.thomasmore.rott.MainActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".EditTeamActivity"
-            android:parentActivityName=".MainActivity">
+            android:name="be.thomasmore.rott.EditTeamActivity"
+            android:parentActivityName="be.thomasmore.rott.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="be.thomasmore.swrott.MainActivity" />
+                android:value="be.thomasmore.rott.MainActivity" />
         </activity>
         <activity
-            android:name=".Splash"
+            android:name="be.thomasmore.rott.Splash"
             android:theme="@style/rottTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,29 +36,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddMember"
-            android:parentActivityName=".EditTeamActivity">
+            android:name="be.thomasmore.rott.AddMember"
+            android:parentActivityName="be.thomasmore.rott.EditTeamActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="be.thomasmore.swrott.EditTeamActivity" />
+                android:value="be.thomasmore.rott.EditTeamActivity" />
         </activity>
-        <activity android:name=".EditMember" />
-        <activity android:name=".ChoosePicture" />
+        <activity android:name="be.thomasmore.rott.EditMember" />
+        <activity android:name="be.thomasmore.rott.ChoosePicture" />
         <activity
-            android:name=".StartFight"
-            android:parentActivityName=".MainActivity">
+            android:name="be.thomasmore.rott.StartFight"
+            android:parentActivityName="be.thomasmore.rott.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="be.thomasmore.swrott.MainActivity" />
+                android:value="be.thomasmore.rott.MainActivity" />
         </activity>
-        <activity android:name=".Fight" />
-        <activity android:name=".FightResult" />
+        <activity android:name="be.thomasmore.rott.Fight" />
+        <activity android:name="be.thomasmore.rott.FightResult" />
         <activity
-            android:name=".FightDetails"
-            android:parentActivityName=".FightResult" />
-        <activity android:name=".About" />
+            android:name="be.thomasmore.rott.FightDetails"
+            android:parentActivityName="be.thomasmore.rott.FightResult" />
+        <activity android:name="be.thomasmore.rott.About" />
         <activity
-            android:name=".Wiki"
+            android:name="be.thomasmore.rott.Wiki"
             android:label="@string/title_activity_wiki"></activity>
     </application>
 

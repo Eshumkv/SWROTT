@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="be.thomasmore.swrott.Fight">
+    tools:context="be.thomasmore.rott.Fight">
 
     <RelativeLayout
         android:id="@+id/usedForSearch"
